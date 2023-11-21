@@ -39,7 +39,6 @@ for x, y in models_all.items():
     print(x)
     print(y.most_similar("taxes"))
 
-# --> work has a different meaning before 1850
 
 #%% visualize semantic change over time (PCA with keyword as passive projection)
 
@@ -171,7 +170,7 @@ keywords['econ'] = [
 ]
 
 keywords['liberal'] = [
-    "free", "liberal", "freedom", "liberalism", "laissez", "faire"
+    "free", "unfettered", "liberal", "freedom", "liberalism", "laissez", "faire"
 ]
 
 keywords['intervention'] = [
@@ -191,7 +190,7 @@ for i in keywords['intervention']:
 
 
 keywords['liberal'] = [
-    "free", "liberal", "freedom"
+    "free", "unfettered", "freedom"
 ]
 
 
@@ -328,7 +327,3 @@ simdim.simdim(models_all, keywords, 'econ', 'private', 'social', ci=90)
 
 
 
-#%% test alternative way to measure distances (simdim2)
-
-simdim.simdim(models_all, keywords, 'work', 'Toil & Trouble', 'Pleasure', ci=90)
-simdim2.simdim2(models_all, keywords, 'work', 'Toil & Trouble', 'Pleasure', ci=90)
