@@ -15,7 +15,7 @@ import matplotlib.lines as mlines
 
 
 
-def simdim(models, keywords, key, *dims, rangelow=1850, rangehigh=2000, rangestep=10, ci=95, bootstrap=1000):
+def simdim(models, keywords, key, *dims, rangelow=1890, rangehigh=2000, rangestep=10, ci=95, bootstrap=1000):
 
     medians = pd.DataFrame()
     lower_cis = pd.DataFrame()
@@ -90,7 +90,7 @@ def simdim(models, keywords, key, *dims, rangelow=1850, rangehigh=2000, rangeste
 
     plt.xlabel("Year")
     plt.ylabel("Cosine Similarity")
-    plt.xticks(range(1850, 2000, 20))
+    plt.xticks(range(rangelow, rangehigh, 20))
     plt.tight_layout()
 
     # show plot
