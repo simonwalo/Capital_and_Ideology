@@ -140,105 +140,6 @@ checksim.to_clipboard()
 keywords['identity'] = [
     "identity", "fulfilling", "expression", "express"
 ]
-keywords = dict()
-
-keywords['work'] = [
-    "work", "works", "worked", "working", "job", "jobs",
-    "career", "careers",
-    "profession", "professions", "professional",
-    "occupation", "occupations",
-    "employment", "employed",
-    "labor", "labors", 'labour', 'labours'
-]
-
-# check if all terms exist in all embeddings
-for i in keywords['work']:
-    for year, model in models_all.items():
-        if model[i].all() == models_all[1840]['biology'].all():
-            if year >= 1850:
-                print(str(year) + ": " + i)
-
-
-keywords['work'] = [
-    "work", "works", "worked", "working", "job", "jobs",
-    "career",
-    "profession", "professions", "professional",
-    "occupation", "occupations",
-    "employment", "employed"
-]
-
-# check similarity of words
-checksim = listsim.listsim(models_all, keywords, 'work')
-checksim.to_clipboard() # insert & check in excel
-
-
-
-keywords['rich'] = ["wealth", "wealthy", "rich", "affluence", "affluent"]
-keywords['poor'] = ["poor", "poverty", "impoverished", "destitute", "needy"]
-
-keywords['Affluence'] = keywords['rich'] + keywords['poor']
-
-# check if all terms exist in all embeddings
-for i in keywords['Affluence']:
-    for year, model in models_all.items():
-        if model[i].all() == models_all[1840]['biology'].all():
-            if year >= 1850:
-                print(str(year) + ": " + i)
-
-
-keywords['Religion'] = [
-    "redemption", "salvation", "god", "religion", "holy", "calling", "faith", "pious",
-    "spiritual", "sacred", "divine", "belief", "worship"
-]
-
-# check if all terms exist in all embeddings
-for i in keywords['Religion']:
-    for year, model in models_all.items():
-        if model[i].all() == models_all[1840]['biology'].all():
-            if year >= 1850:
-                print(str(year) + ": " + i)
-
-# check similarity of words
-checksim = listsim.listsim(models_all, keywords, 'Religion')
-checksim.to_clipboard()
-
-keywords['moralpos'] = [
-    "good", "moral", "honest", "virtuous", "virtue", "decent", "noble",
-    "honour", "integrity", "worth", "dignity", "just", "justice"
-]
-
-keywords['moralneg'] = [
-    "evil", "immoral", "bad", "dishonest", "sinful", "vice", "unjust", "injustice"
-]
-
-
-keywords['Morality'] = [
-    'good', 'evil', 'moral', 'immoral', 'good', 'bad', 'honest', 'dishonest',
-    'virtuous', 'sinful', 'virtue', 'vice',
-    "decent", "noble", "honour", "integrity", "worth", "dignity"
-]
-
-# check if all terms exist in all embeddings
-for i in keywords['Morality']:
-    for year, model in models_all.items():
-        if model[i].all() == models_all[1840]['biology'].all():
-            if year >= 1850:
-                print(str(year) + ": " + i)
-
-# check similarity of words
-checksim = listsim.listsim(models_all, keywords, 'Morality')
-checksim.to_clipboard()
-
-keywords['identity'] = [
-    "identity", "fulfilling", "expression", "express"
-]
-
-# check if all terms exist in all embeddings
-for i in keywords['identity']:
-    for year, model in models_all.items():
-        if model[i].all() == models_all[1840]['biology'].all():
-            if year >= 1850:
-                print(str(year) + ": " + i)
 
 
 simdim.simdim(models_all, keywords, 'work', 'Religion', 'Affluence', ci=90)
@@ -272,7 +173,7 @@ keywords['econ'] = [
 
 
 # check if all terms exist in all embeddings
-for i in keywords['liberal']:
+for i in keywords['econ']:
     for year, model in models_all.items():
         if model[i].all() == models_all[1840]['biology'].all():
             if year >= 1880:
@@ -305,11 +206,11 @@ simdim.simdim(models_all, keywords, 'econ', 'liberal', 'intervention', ci=90)
 
 
 keywords['moralpos'] = [
-    "good", "just", "justice", "fair"
+    "good", "just", "justice", "fair", "desirable"
 ]
 
 keywords['moralneg'] = [
-    "evil", "immoral", "bad", "unjust", "injustice", "unfair"
+    "evil", "immoral", "bad", "unjust", "injustice", "unfair", "undesirable"
 ]
 
 
@@ -383,15 +284,15 @@ simdim.simdim(models_all, keywords, 'Affluence', 'merit', 'luck', ci=90)
 
 
 keywords['econ'] = [
-    "economy", "invest", "economic", "business", "money", "trade"
+    "business", "trade", "market", "industry", "production"
 ]
 
 keywords['private'] = [
-    "private", "profit", "profits", "gain", "money"
+    "private", "profit", "profits", "gain", "money", "earning", "earnings", "revenue"
 ]
 
 keywords['social'] = [
-    "social", "benefit", "benefits", "welfare", "society"
+    "social", "welfare", "benefit", "benefits", "society", "public", "value"
 ]
 
 
@@ -402,6 +303,11 @@ for i in keywords['social']:
         if model[i].all() == models_all[1840]['biology'].all():
             if year >= 1850:
                 print(str(year) + ": " + i)
+
+#most similar terms by decade
+for x, y in models_all.items():
+    print(x)
+    print(y.most_similar("economy"))
 
 simdim.simdim(models_all, keywords, 'econ', 'private', 'social', ci=90)
 
