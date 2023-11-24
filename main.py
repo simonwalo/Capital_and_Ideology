@@ -47,9 +47,6 @@ semchange.semchange(models_all, "work", rangelow=1810, rangehigh=2000, rangestep
 
 #%% Protestant Ethic
 
-# set up dict for "work"
-
-
 keywords['work'] = [
     "work", "works", "worked", "working", "job", "jobs",
     "career", "careers",
@@ -140,105 +137,6 @@ checksim.to_clipboard()
 keywords['identity'] = [
     "identity", "fulfilling", "expression", "express"
 ]
-keywords = dict()
-
-keywords['work'] = [
-    "work", "works", "worked", "working", "job", "jobs",
-    "career", "careers",
-    "profession", "professions", "professional",
-    "occupation", "occupations",
-    "employment", "employed",
-    "labor", "labors", 'labour', 'labours'
-]
-
-# check if all terms exist in all embeddings
-for i in keywords['work']:
-    for year, model in models_all.items():
-        if model[i].all() == models_all[1840]['biology'].all():
-            if year >= 1850:
-                print(str(year) + ": " + i)
-
-
-keywords['work'] = [
-    "work", "works", "worked", "working", "job", "jobs",
-    "career",
-    "profession", "professions", "professional",
-    "occupation", "occupations",
-    "employment", "employed"
-]
-
-# check similarity of words
-checksim = listsim.listsim(models_all, keywords, 'work')
-checksim.to_clipboard() # insert & check in excel
-
-
-
-keywords['rich'] = ["wealth", "wealthy", "rich", "affluence", "affluent"]
-keywords['poor'] = ["poor", "poverty", "impoverished", "destitute", "needy"]
-
-keywords['Affluence'] = keywords['rich'] + keywords['poor']
-
-# check if all terms exist in all embeddings
-for i in keywords['Affluence']:
-    for year, model in models_all.items():
-        if model[i].all() == models_all[1840]['biology'].all():
-            if year >= 1850:
-                print(str(year) + ": " + i)
-
-
-keywords['Religion'] = [
-    "redemption", "salvation", "god", "religion", "holy", "calling", "faith", "pious",
-    "spiritual", "sacred", "divine", "belief", "worship"
-]
-
-# check if all terms exist in all embeddings
-for i in keywords['Religion']:
-    for year, model in models_all.items():
-        if model[i].all() == models_all[1840]['biology'].all():
-            if year >= 1850:
-                print(str(year) + ": " + i)
-
-# check similarity of words
-checksim = listsim.listsim(models_all, keywords, 'Religion')
-checksim.to_clipboard()
-
-keywords['moralpos'] = [
-    "good", "moral", "honest", "virtuous", "virtue", "decent", "noble",
-    "honour", "integrity", "worth", "dignity", "just", "justice"
-]
-
-keywords['moralneg'] = [
-    "evil", "immoral", "bad", "dishonest", "sinful", "vice", "unjust", "injustice"
-]
-
-
-keywords['Morality'] = [
-    'good', 'evil', 'moral', 'immoral', 'good', 'bad', 'honest', 'dishonest',
-    'virtuous', 'sinful', 'virtue', 'vice',
-    "decent", "noble", "honour", "integrity", "worth", "dignity"
-]
-
-# check if all terms exist in all embeddings
-for i in keywords['Morality']:
-    for year, model in models_all.items():
-        if model[i].all() == models_all[1840]['biology'].all():
-            if year >= 1850:
-                print(str(year) + ": " + i)
-
-# check similarity of words
-checksim = listsim.listsim(models_all, keywords, 'Morality')
-checksim.to_clipboard()
-
-keywords['identity'] = [
-    "identity", "fulfilling", "expression", "express"
-]
-
-# check if all terms exist in all embeddings
-for i in keywords['identity']:
-    for year, model in models_all.items():
-        if model[i].all() == models_all[1840]['biology'].all():
-            if year >= 1850:
-                print(str(year) + ": " + i)
 
 
 simdim.simdim(models_all, keywords, 'work', 'Religion', 'Affluence', ci=0)
