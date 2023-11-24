@@ -241,15 +241,16 @@ for i in keywords['identity']:
                 print(str(year) + ": " + i)
 
 
-simdim.simdim(models_all, keywords, 'work', 'Religion', 'Affluence', ci=90)
-simdim.simdim(models_all, keywords, 'work', 'Religion', 'Morality', ci=90)
-simdim.simdim(models_all, keywords, 'work', 'Morality', 'Affluence', ci=90)
+simdim.simdim(models_all, keywords, 'work', 'Religion', 'Affluence', ci=0)
+simdim.simdim(models_all, keywords, 'work', 'Religion', 'Morality', ci=0)
+simdim.simdim(models_all, keywords, 'work', 'Morality', 'Affluence', ci=0)
 
 
-simdim.simdim(models_all, keywords, 'work', 'rich', 'poor', ci=90)
-simdim.simdim(models_all, keywords, 'work', 'moralpos', 'moralneg', ci=90)
 
-simdim.simdim(models_all, keywords, 'work', 'identity', 'Religion', ci=90)
+simdim.simdim(models_all, keywords, 'work', 'rich', 'poor', ci=0)
+simdim.simdim(models_all, keywords, 'work', 'moralpos', 'moralneg', ci=0)
+
+simdim.simdim(models_all, keywords, 'work', 'identity', 'Religion', ci=0)
 
 
 
@@ -267,7 +268,7 @@ keywords['econ'] = [
 ]
 
 keywords['econ'] = [
-    "economy", "economic", "business", "trade", "market"
+    "economy", "invest", "economic", "business", "money", "trade"
 ]
 
 
@@ -295,7 +296,7 @@ for x, y in models_all.items():
     print(x)
     print(y.most_similar("laissez"))
 
-simdim.simdim(models_all, keywords, 'econ', 'liberal', 'intervention', ci=90)
+simdim.simdim(models_all, keywords, 'econ', 'liberal', 'intervention', ci=0)
 
 
 
@@ -304,11 +305,11 @@ simdim.simdim(models_all, keywords, 'econ', 'liberal', 'intervention', ci=90)
 #%% moralische Bewertung von Ungleichheit & Steuern
 
 
-keywords['moralpos'] = [
+keywords['just'] = [
     "good", "just", "justice", "fair"
 ]
 
-keywords['moralneg'] = [
+keywords['unjust'] = [
     "evil", "immoral", "bad", "unjust", "injustice", "unfair"
 ]
 
@@ -333,15 +334,15 @@ for i in keywords['inequality']:
             if year >= 180:
                 print(str(year) + ": " + i)
 
-simdim.simdim(models_all, keywords, 'inequality', 'moralpos', 'moralneg', ci=90)
+simdim.simdim(models_all, keywords, 'inequality', 'just', 'unjust', ci=0)
 
-simdim.simdim(models_all, keywords, 'taxes', 'moralpos', 'moralneg', ci=90)
+simdim.simdim(models_all, keywords, 'taxes', 'just', 'unjust', ci=0)
 
-simdim.simdim(models_all, keywords, 'poor', 'moralpos', 'moralneg', ci=90)
-simdim.simdim(models_all, keywords, 'rich', 'moralpos', 'moralneg', ci=90)
-simdim.simdim(models_all, keywords, 'Affluence', 'moralpos', 'moralneg', ci=90)
+simdim.simdim(models_all, keywords, 'poor', 'just', 'unjust', ci=0)
+simdim.simdim(models_all, keywords, 'rich', 'just', 'unjust', ci=0)
+simdim.simdim(models_all, keywords, 'Affluence', 'just', 'unjust', ci=0)
 
-simdim.simdim(models_all, keywords, 'unemployment', 'moralpos', 'moralneg', ci=90)
+simdim.simdim(models_all, keywords, 'unemployment', 'just', 'unjust', ci=0)
 
 
 
@@ -371,7 +372,7 @@ for i in keywords['taxes']:
             if year >= 1850:
                 print(str(year) + ": " + i)
 
-simdim.simdim(models_all, keywords, 'Affluence', 'merit', 'luck', ci=90)
+simdim.simdim(models_all, keywords, 'Affluence', 'merit', 'luck', ci=0)
 
 
 
@@ -387,11 +388,12 @@ keywords['econ'] = [
 ]
 
 keywords['private'] = [
-    "private", "profit", "profits", "gain", "money"
+    "private", "profit", "profits", "gain", "money", "revenue", "earn", "income"
 ]
 
-keywords['social'] = [
-    "social", "benefit", "benefits", "welfare", "society"
+keywords['public'] = [
+    "social", "benefit", "benefits", "welfare", "society",
+    "community", "public", "wellbeing", "promote"
 ]
 
 
@@ -400,10 +402,15 @@ keywords['social'] = [
 for i in keywords['social']:
     for year, model in models_all.items():
         if model[i].all() == models_all[1840]['biology'].all():
-            if year >= 1850:
+            if year >= 1880:
                 print(str(year) + ": " + i)
 
-simdim.simdim(models_all, keywords, 'econ', 'private', 'social', ci=90)
+#most similar terms by decade
+for x, y in models_all.items():
+    print(x)
+    print(y.most_similar("profit"))
+
+simdim.simdim(models_all, keywords, 'econ', 'private', 'public', ci=0)
 
 
 
