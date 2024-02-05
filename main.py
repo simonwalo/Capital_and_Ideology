@@ -261,7 +261,7 @@ simdim.simdim(models_all, keywords, 'econ', 'liberal', 'intervention', rangelow=
 keywords['econ'] = [
     "profit", "profitable", "cost", "benefit", "sell", "revenue", "maximize", "gain",
     "loss", "capital", "invest", "asset", "economic", "price", "business", "money", "trade",
-    "pay", "paid"
+    "pay", "paid", "market"
 ]
 
 # check if all terms exist in all embeddings
@@ -275,7 +275,7 @@ for i in keywords['econ']:
 keywords['econ'] = [
     "profit", "profitable", "cost", "benefit", "sell", "revenue", "gain",
     "loss", "capital", "invest", "economic", "price", "business", "money", "trade",
-    "pay", "paid"
+    "pay", "paid", "market"
 ]
 
 # check similarity of words
@@ -302,26 +302,6 @@ for i in keywords['Politics']:
                 print(str(year) + ": " + i)
 
 
-
-keywords['justice'] = [
-    "justice", "just", "fair", "fairness", "equal", "equality", "moral", "morality"
-]
-
-# check similarity of words
-checksim = listsim.listsim(models_all, keywords, 'justice')
-checksim.to_clipboard()
-
-# check if all terms exist in all embeddings
-for i in keywords['justice']:
-    for year, model in models_all.items():
-        if model[i].all() == models_all[1840]['biology'].all():
-            if year >= 1850:
-                print(str(year) + ": " + i)
-
-
-simdim.simdim(models_all, keywords, 'Politics', 'econ', 'justice', ci=0)
-
-
 #most similar terms by decade
 for x, y in models_all.items():
     print(x)
@@ -343,7 +323,8 @@ for i in keywords['power']:
                 print(str(year) + ": " + i)
 
 
-simdim.simdim(models_all, keywords, 'Politics', 'power', 'econ', rangelow=1850, ci=0)
+simdim.simdim(models_all, keywords, 'Politics', 'econ', 'power', rangelow=1850, ci=0)
+
 
 
 ### education ###
@@ -365,11 +346,28 @@ for i in keywords['Education']:
                 print(str(year) + ": " + i)
 
 
-keywords['humanistic'] = [
-    "development", "develop", "equal", "equality", "dignity", "curious", "curiosity", "stimulate", "stimulating"
+keywords['develop'] = [
+    "development", "develop", "skill", "skills", "critical", "thinking", "think", "growth", "empower",
+    "equal", "equality", "dignity", "curious", "curiosity", "stimulate", "stimulating"
 ]
 
-simdim.simdim(models_all, keywords, 'Education', 'econ', 'humanistic', rangelow=1850 , ci=0)
+# check if all terms exist in all embeddings
+for i in keywords['develop']:
+    for year, model in models_all.items():
+        if model[i].all() == models_all[1840]['biology'].all():
+            if year >= 1850:
+                print(str(year) + ": " + i)
+
+
+keywords['develop'] = [
+    "development", "develop", "skill", "critical", "thinking", "think", "growth", "empower",
+    "equal", "equality", "dignity", "curious", "curiosity", "stimulate", "stimulating"
+]
+
+
+simdim.simdim(models_all, keywords, 'Education', 'develop', 'econ', rangelow=1850, ci=0)
+
+
 
 
 ### health ###
@@ -398,7 +396,8 @@ for i in keywords['medicine']:
 
 
 keywords['health'] = [
-    "health", "welfare", "healthy", "provision", "provide"
+    "health", "healthy", "welfare", "provision", "provide", "care", "treat", "treatment", "diagnose", "sick", "sickness",
+    "disease", "therapy"
 ]
 
 # check similarity of words
@@ -413,7 +412,14 @@ for i in keywords['health']:
                 print(str(year) + ": " + i)
 
 
-simdim.simdim(models_all, keywords, 'medicine', 'econ', 'health', ci=90)
+
+keywords['health'] = [
+    "health", "healthy", "welfare", "provision", "provide", "care", "treat", "treatment", "sick", "sickness",
+    "disease"
+]
+
+
+simdim.simdim(models_all, keywords, 'medicine', 'health', 'econ', rangelow=1850, ci=0)
 
 
 ### science ###
@@ -441,7 +447,8 @@ for i in keywords['science']:
 
 
 keywords['scientific'] = [
-    "truth", "knowledge", "collective"
+    "truth", "true", "untrue", "knowledge", "collective", "discover", "discovery", "understand", "understanding",
+    "explain", "explanation"
 ]
 
 # check similarity of words
@@ -456,7 +463,7 @@ for i in keywords['scientific']:
                 print(str(year) + ": " + i)
 
 
-simdim.simdim(models_all, keywords, 'science', 'econ', 'scientific', ci=90)
+simdim.simdim(models_all, keywords, 'science', 'scientific', 'econ', rangelow=1850, ci=0)
 
 
 
