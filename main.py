@@ -139,9 +139,9 @@ keywords['identity'] = [
 ]
 
 
-simdim.simdim(models_all, keywords, 'work', 'Religion', 'Affluence', ci=0)
-simdim.simdim(models_all, keywords, 'work', 'Religion', 'Morality', ci=0)
-simdim.simdim(models_all, keywords, 'work', 'Morality', 'Affluence', ci=0)
+simdim.simdim(models_all, keywords, 'work', 'Religion', 'Affluence', rangelow=1850, ci=0)
+simdim.simdim(models_all, keywords, 'work', 'Religion', 'Morality', rangelow=1850, ci=0)
+simdim.simdim(models_all, keywords, 'work', 'Morality', 'Affluence', rangelow=1850, ci=0)
 
 
 
@@ -171,7 +171,7 @@ keywords['econ'] = [
 
 
 # check if all terms exist in all embeddings
-for i in keywords['liberal']:
+for i in keywords['econ']:
     for year, model in models_all.items():
         if model[i].all() == models_all[1840]['biology'].all():
             if year >= 1880:
@@ -194,7 +194,7 @@ for x, y in models_all.items():
     print(x)
     print(y.most_similar("laissez"))
 
-simdim.simdim(models_all, keywords, 'econ', 'liberal', 'intervention', ci=0)
+simdim.simdim(models_all, keywords, 'econ', 'liberal', 'intervention', rangelow=1850, ci=0)
 
 
 
