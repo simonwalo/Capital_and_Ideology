@@ -154,6 +154,57 @@ simdim.simdim(models_all, keywords, 'work', 'identity', 'Religion', ci=0)
 
 
 
+#%% Alienation
+
+keywords['work'] = [
+    "work", "works", "worked", "working", "job", "jobs",
+    "career",
+    "profession", "professions", "professional",
+    "occupation", "occupations",
+    "employment", "employed"
+]
+
+
+keywords['Extrinsic'] = [
+                    "earn", "earning", "earnings",
+                    "wage", "wages", "salary", "income", "remuneration", "pay",
+                    "secure", "security", "insecure", "insecurity"
+]
+
+# check if all terms exist in all embeddings
+for i in keywords['Extrinsic']:
+    for year, model in models_all.items():
+        if model[i].all() == models_all[1840]['biology'].all():
+            if year >= 1850:
+                print(str(year) + ": " + i)
+
+# check similarity of words
+checksim = listsim.listsim(models_all, keywords, 'Extrinsic')
+checksim.to_clipboard()
+
+keywords['Intrinsic'] = [
+    "interesting", "boring", "fulfilling", "useful", "useless",
+    "expression", "creative", "express", "satisfying", "stimulating", "expressive", "important"
+]
+
+# check similarity of words
+checksim = listsim.listsim(models_all, keywords, 'Intrinsic')
+checksim.to_clipboard()
+
+# check if all terms exist in all embeddings
+for i in keywords['Intrinsic']:
+    for year, model in models_all.items():
+        if model[i].all() == models_all[1840]['biology'].all():
+            if year >= 1850:
+                print(str(year) + ": " + i)
+
+
+simdim.simdim(models_all, keywords, 'work', 'Extrinsic', 'Intrinsic', rangelow=1850, ci=00)
+
+
+
+
+
 
 
 #%% (Neo-)Liberalism
@@ -198,6 +249,224 @@ simdim.simdim(models_all, keywords, 'econ', 'liberal', 'intervention', rangelow=
 
 
 
+
+
+
+
+
+
+#%% Economization
+
+
+keywords['econ'] = [
+    "profit", "profitable", "cost", "benefit", "sell", "revenue", "maximize", "gain",
+    "loss", "capital", "invest", "asset", "economic", "price", "business", "money", "trade",
+    "pay", "paid"
+]
+
+# check if all terms exist in all embeddings
+for i in keywords['econ']:
+    for year, model in models_all.items():
+        if model[i].all() == models_all[1840]['biology'].all():
+            if year >= 1850:
+                print(str(year) + ": " + i)
+
+
+keywords['econ'] = [
+    "profit", "profitable", "cost", "benefit", "sell", "revenue", "gain",
+    "loss", "capital", "invest", "economic", "price", "business", "money", "trade",
+    "pay", "paid"
+]
+
+# check similarity of words
+checksim = listsim.listsim(models_all, keywords, 'econ')
+checksim.to_clipboard() # insert & check in excel
+
+
+
+### politics ###
+
+keywords['Politics'] = [
+    "politics", "political", "policy", "legislative", "legislation", "government", "state"
+]
+
+# check similarity of words
+checksim = listsim.listsim(models_all, keywords, 'Politics')
+checksim.to_clipboard()
+
+# check if all terms exist in all embeddings
+for i in keywords['Politics']:
+    for year, model in models_all.items():
+        if model[i].all() == models_all[1840]['biology'].all():
+            if year >= 1850:
+                print(str(year) + ": " + i)
+
+
+
+keywords['justice'] = [
+    "justice", "just", "fair", "fairness", "equal", "equality", "moral", "morality"
+]
+
+# check similarity of words
+checksim = listsim.listsim(models_all, keywords, 'justice')
+checksim.to_clipboard()
+
+# check if all terms exist in all embeddings
+for i in keywords['justice']:
+    for year, model in models_all.items():
+        if model[i].all() == models_all[1840]['biology'].all():
+            if year >= 1850:
+                print(str(year) + ": " + i)
+
+
+simdim.simdim(models_all, keywords, 'Politics', 'econ', 'justice', ci=0)
+
+
+#most similar terms by decade
+for x, y in models_all.items():
+    print(x)
+    print(y.most_similar("power"))
+
+keywords['power'] = [
+    "power", "rule", "influence", "law", "laws", "authority", "sovereign", "control", "command"
+]
+
+# check similarity of words
+checksim = listsim.listsim(models_all, keywords, 'power')
+checksim.to_clipboard()
+
+# check if all terms exist in all embeddings
+for i in keywords['power']:
+    for year, model in models_all.items():
+        if model[i].all() == models_all[1840]['biology'].all():
+            if year >= 1850:
+                print(str(year) + ": " + i)
+
+
+simdim.simdim(models_all, keywords, 'Politics', 'power', 'econ', rangelow=1850, ci=0)
+
+
+### education ###
+
+#most similar terms by decade
+for x, y in models_all.items():
+    print(x)
+    print(y.most_similar("education"))
+
+keywords['Education'] = [
+    "education", "school", "study", "learn", "teach", "university"
+]
+
+# check if all terms exist in all embeddings
+for i in keywords['Education']:
+    for year, model in models_all.items():
+        if model[i].all() == models_all[1840]['biology'].all():
+            if year >= 1850:
+                print(str(year) + ": " + i)
+
+
+keywords['humanistic'] = [
+    "development", "develop", "equal", "equality", "dignity", "curious", "curiosity", "stimulate", "stimulating"
+]
+
+simdim.simdim(models_all, keywords, 'Education', 'econ', 'humanistic', rangelow=1850 , ci=0)
+
+
+### health ###
+
+
+#most similar terms by decade
+for x, y in models_all.items():
+    print(x)
+    print(y.most_similar("health"))
+
+keywords['medicine'] = [
+    "medicine", "medical", "care", "hospital", "doctor", "physician"
+]
+
+# check similarity of words
+checksim = listsim.listsim(models_all, keywords, 'medicine')
+checksim.to_clipboard()
+
+# check if all terms exist in all embeddings
+for i in keywords['medicine']:
+    for year, model in models_all.items():
+        if model[i].all() == models_all[1840]['biology'].all():
+            if year >= 1850:
+                print(str(year) + ": " + i)
+
+
+
+keywords['health'] = [
+    "health", "welfare", "healthy", "provision", "provide"
+]
+
+# check similarity of words
+checksim = listsim.listsim(models_all, keywords, 'health')
+checksim.to_clipboard()
+
+# check if all terms exist in all embeddings
+for i in keywords['health']:
+    for year, model in models_all.items():
+        if model[i].all() == models_all[1840]['biology'].all():
+            if year >= 1850:
+                print(str(year) + ": " + i)
+
+
+simdim.simdim(models_all, keywords, 'medicine', 'econ', 'health', ci=90)
+
+
+### science ###
+
+#most similar terms by decade
+for x, y in models_all.items():
+    print(x)
+    print(y.most_similar("science"))
+
+keywords['science'] = [
+    "science", "sciences", "scientific", "university", "research", "study"
+]
+
+# check similarity of words
+checksim = listsim.listsim(models_all, keywords, 'science')
+checksim.to_clipboard()
+
+# check if all terms exist in all embeddings
+for i in keywords['science']:
+    for year, model in models_all.items():
+        if model[i].all() == models_all[1840]['biology'].all():
+            if year >= 1850:
+                print(str(year) + ": " + i)
+
+
+
+keywords['scientific'] = [
+    "truth", "knowledge", "collective"
+]
+
+# check similarity of words
+checksim = listsim.listsim(models_all, keywords, 'scientific')
+checksim.to_clipboard()
+
+# check if all terms exist in all embeddings
+for i in keywords['scientific']:
+    for year, model in models_all.items():
+        if model[i].all() == models_all[1840]['biology'].all():
+            if year >= 1850:
+                print(str(year) + ": " + i)
+
+
+simdim.simdim(models_all, keywords, 'science', 'econ', 'scientific', ci=90)
+
+
+
+
+
+
+
+
+
+##### NOT INCLUDED IN PAPER #####
 
 
 #%% moralische Bewertung von Ungleichheit & Steuern
@@ -309,12 +578,6 @@ for x, y in models_all.items():
     print(y.most_similar("profit"))
 
 simdim.simdim(models_all, keywords, 'econ', 'private', 'public', ci=0)
-
-
-
-
-
-
 
 
 
