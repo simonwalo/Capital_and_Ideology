@@ -4,6 +4,7 @@ import semchange
 import simdim
 import listsim
 from gensim.models import KeyedVectors
+import simdimnew
 
 
 #%% load data
@@ -140,8 +141,13 @@ keywords['identity'] = [
 
 
 simdim.simdim(models_all, keywords, 'work', 'Religion', 'Affluence', rangelow=1850, ci=0)
+simdimnew.simdimnew(models_all, keywords, 'work', 'Religion', 'Affluence')
+
 simdim.simdim(models_all, keywords, 'work', 'Religion', 'Morality', rangelow=1850, ci=0)
 simdim.simdim(models_all, keywords, 'work', 'Morality', 'Affluence', rangelow=1850, ci=0)
+
+
+simdimnew.simdimnew(models_all, keywords, 'work', 'Morality', 'Affluence', 'Religion')
 
 
 
