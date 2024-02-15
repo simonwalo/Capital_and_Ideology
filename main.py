@@ -4,7 +4,7 @@ import semchange
 import simdim
 import listsim
 from gensim.models import KeyedVectors
-import simdimnew
+#import simdimnew
 
 
 #%% load data

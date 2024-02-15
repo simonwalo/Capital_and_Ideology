@@ -5,7 +5,7 @@
 
 # to do:
 # - relative measures of similarity instead of absolute ones (see review)
-# - check if all terms exist in all embeddings
+# - check first if all terms exist in all embeddings
 
 
 
@@ -18,31 +18,50 @@ import matplotlib.lines as mlines
 
 
 # basics
-allkeys = list(models_all[1850].key_to_index.keys())
 
-test = []
 
-for key in allkeys:
-    d = models_all[1850].n_similarity(keywords['work'], [key])
-    test.append(d)
+#get similarity between anchor and all words per year
 
-data = pd.DataFrame()
-data['test'] = test
-data.mean()
-data.std()
+fulltable = pd.DataFrame()
 
-datastand = (data-data.mean())/data.std()
-datastand.mean()
-datastand.std()
+for year, model in models_all.items():
+    if year in range(1850, 2000, 10):
+        allkeys = list(model.key_to_index.keys())
+        templist = []
 
-datastand.index = allkeys
+        for key in allkeys:
+            d = model.n_similarity(keywords['work'], [key])
+            templist.append(d)
 
-datastand.loc['work', 'test']
+        data = pd.DataFrame()
+        data.index = allkeys
+        data[year] = templist
 
-models_all[1850].n_similarity(['work'], ['works'])
-models_all[1850].n_similarity(['work'], 'works')
-models_all[1850].similarity('work', 'works')
-# must be in list!!!
+        fulltable = fulltable.merge(data, left_index=True, right_index=True, how='right')
+
+#standardize dataframe
+fulltablestand = (fulltable-fulltable.mean())/fulltable.std()
+
+# only keep values for relevant keys
+fulltablestand = fulltablestand[fulltablestand.index.isin(keywords['Morality'])]
+
+# calculate mean values per year
+mean_values = fulltablestand.mean()
+mean_values
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # function
