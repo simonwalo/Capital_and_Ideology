@@ -26,7 +26,7 @@ def simdim(models, keywords, key, *dims, rangelow=1890, rangehigh=2000, rangeste
 
         for i in range(bootstrap):
 
-            sample1 = keywords[key]  # random.choices(keywords['work'], k=len(keywords['work']))
+            sample1 = keywords[key]
             sample2 = random.choices(keywords[dim], k=len(keywords[dim]))
 
             d = []

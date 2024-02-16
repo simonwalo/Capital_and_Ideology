@@ -17,65 +17,57 @@ from scipy.interpolate import interp1d
 import matplotlib.lines as mlines
 
 
-# basics
-
-
-#get similarity between anchor and all words per year
-
-fulltable = pd.DataFrame()
-
-for year, model in models_all.items():
-    if year in range(1850, 2000, 10):
-        allkeys = list(model.key_to_index.keys())
-        templist = []
-
-        for key in allkeys:
-            d = model.n_similarity(keywords['work'], [key])
-            templist.append(d)
-
-        data = pd.DataFrame()
-        data.index = allkeys
-        data[year] = templist
-
-        fulltable = fulltable.merge(data, left_index=True, right_index=True, how='right')
-
-#standardize dataframe
-fulltablestand = (fulltable-fulltable.mean())/fulltable.std()
-
-# only keep values for relevant keys
-fulltablestand = fulltablestand[fulltablestand.index.isin(keywords['Morality'])]
-
-# calculate mean values per year
-mean_values = fulltablestand.mean()
-mean_values
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # function
 
 def simdimnew(models, keywords, key, *dims, rangelow=1850, rangehigh=2000, rangestep=10):
 
+    # check if all terms exist in all models
+    for year, model in models.items():
+        if year in range(rangelow, rangehigh, rangestep):
+            for term in keywords[key]:
+                if model[term].all() == models[1810]['biology'].all():
+                    print('Keyword ', term, ' not available for ', year)
+                    return
+            for dim in dims:
+                for term in keywords[dim]:
+                    if model[term].all() == models[1810]['biology'].all():
+                        print('Keyword ', term, ' not available for ', year)
+                        return
+
+
+    # get similarity between anchor and all words per year
+
     similarities = pd.DataFrame()
 
+    fulltable = pd.DataFrame()
+
+    for year, model in models.items():
+        if year in range(rangelow, rangehigh, rangestep):
+            allkeys = list(model.key_to_index.keys())
+            templist = []
+
+            for term in allkeys:
+                d = model.n_similarity(keywords[key], [term])
+                templist.append(d)
+
+            data = pd.DataFrame()
+            data.index = allkeys
+            data[year] = templist
+
+            fulltable = fulltable.merge(data, left_index=True, right_index=True, how='right')
+
+    # standardize dataframe
+    fulltablestand = (fulltable - fulltable.mean()) / fulltable.std()
+
+    # calculate mean distance for each dim
     for dim in dims:
-        d = []
-        for year, model in models.items():
-            if year in range(rangelow, rangehigh, rangestep):
-                d.append(model.n_similarity(keywords[key], keywords[dim]))
-        similarities[dim] = d
+
+        # only keep values for relevant keys
+        dimtable = fulltablestand[fulltablestand.index.isin(keywords[dim])]
+
+        # calculate mean values per year
+        similarities[dim] = dimtable.mean()
+
 
 
     # plot the trendline
@@ -83,7 +75,6 @@ def simdimnew(models, keywords, key, *dims, rangelow=1850, rangehigh=2000, range
     x = range(rangelow, rangehigh, rangestep)
     xnew = np.linspace(rangelow, (rangehigh - 10), 100)
 
-    n = len(dims)
     markslist = ['o', 's', 'x']
     marks = iter(markslist)
 
@@ -118,7 +109,6 @@ def simdimnew(models, keywords, key, *dims, rangelow=1850, rangehigh=2000, range
     # show plot
     plt.show()
     plt.close()
-
 
 
 
