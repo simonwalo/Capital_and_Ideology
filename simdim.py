@@ -15,7 +15,7 @@ import matplotlib.lines as mlines
 
 
 
-def simdim(models, keywords, key, *dims, rangelow=1890, rangehigh=2000, rangestep=10, ci=95, bootstrap=1000):
+def simdim(models, keywords, key, *dims, rangelow=1850, rangehigh=2000, rangestep=10, ci=95, bootstrap=1000):
 
     medians = pd.DataFrame()
     lower_cis = pd.DataFrame()
