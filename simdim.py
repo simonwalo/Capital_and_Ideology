@@ -5,12 +5,11 @@
 # cosine similarity between centers of word clouds
 
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import cm
 import pandas as pd
 import numpy as np
 from scipy.interpolate import interp1d
-import random
 import matplotlib.lines as mlines
+from collections import Counter
 
 
 
@@ -18,19 +17,33 @@ import matplotlib.lines as mlines
 def simdim(models, keywords, key, *dims, rangelow=1850, rangehigh=2000, rangestep=10, stand=False):
 
 
-    # check if all terms exist in all models
+    # use only terms that exist in all models
+
+    cleankeydict = dict()
+    cleankeydict[key] = []
+    for dim in dims:
+        cleankeydict[dim] = []
+
     for year, model in models.items():
         if year in range(rangelow, rangehigh, rangestep):
             for term in keywords[key]:
                 if model[term].all() == models[1810]['biology'].all():
                     print('Keyword ', term, ' not available for ', year)
-                    return
+                else:
+                    cleankeydict[key].append(term)
             for dim in dims:
                 for term in keywords[dim]:
                     if model[term].all() == models[1810]['biology'].all():
                         print('Keyword ', term, ' not available for ', year)
-                        return
+                    else:
+                        cleankeydict[dim].append(term)
 
+    countskey = Counter(cleankeydict[key])
+    cleankeydict[key] = [elem for elem, count in countskey.items() if count == len(range(rangelow, rangehigh, rangestep))]
+    for dim in dims:
+        countsdim = Counter(cleankeydict[dim])
+        cleankeydict[dim] = [elem for elem, count in countsdim.items() if
+                             count == len(range(rangelow, rangehigh, rangestep))]
 
     # get raw distances
     if stand == False:
@@ -41,7 +54,7 @@ def simdim(models, keywords, key, *dims, rangelow=1850, rangehigh=2000, rangeste
             d = []
             for year, model in models.items():
                 if year in range(rangelow, rangehigh, rangestep):
-                    d.append(model.n_similarity(keywords[key], keywords[dim]))
+                    d.append(model.n_similarity(cleankeydict[key], cleankeydict[dim]))
             similarities[dim] = d
 
     # get standardized distances
@@ -59,7 +72,7 @@ def simdim(models, keywords, key, *dims, rangelow=1850, rangehigh=2000, rangeste
                 templist = []
 
                 for term in allkeys:
-                    d = model.n_similarity(keywords[key], [term])
+                    d = model.n_similarity(cleankeydict[key], [term])
                     templist.append(d)
 
                 data = pd.DataFrame()
@@ -74,7 +87,7 @@ def simdim(models, keywords, key, *dims, rangelow=1850, rangehigh=2000, rangeste
         # calculate mean distance for each dim
         for dim in dims:
             # only keep values for relevant keys
-            dimtable = fulltablestand[fulltablestand.index.isin(keywords[dim])]
+            dimtable = fulltablestand[fulltablestand.index.isin(cleankeydict[dim])]
 
             # calculate mean values per year
             similarities[dim] = dimtable.mean()
@@ -85,7 +98,7 @@ def simdim(models, keywords, key, *dims, rangelow=1850, rangehigh=2000, rangeste
     x = range(rangelow, rangehigh, rangestep)
     xnew = np.linspace(rangelow, (rangehigh - 10), 100)
 
-    markslist = ['o', 's']
+    markslist = ['o', 's', 'x']
     marks = iter(markslist)
 
     for dim in dims:

@@ -2,9 +2,7 @@
 
 import semchange
 import simdim
-import listsim
 from gensim.models import KeyedVectors
-import simdimnew
 
 
 #%% load data
@@ -116,14 +114,12 @@ keywords['Morality'] = [
     "decent", "noble", "honour", "integrity", "worth", "dignity"
 ]
 
-simdim.simdim(google, keywords, 'work', 'Morality', 'Affluence', rangelow=1850, ci=00)
-simdim.simdim(google, keywords, 'work', 'Morality', 'Religion', rangelow=1850, ci=00)
-simdim.simdim(google, keywords, 'work', 'Affluence', 'Religion', rangelow=1850, ci=00)
+simdim.simdim(google, keywords, 'work', 'Morality', 'Affluence', 'Religion', rangelow=1850, stand=False)
+simdim.simdim(coha, keywords, 'work', 'Morality', 'Affluence', 'Religion', rangelow=1870, stand=False)
 
-simdim.simdim(coha, keywords, 'work', 'Morality', 'Affluence', rangelow=1850, ci=00)
+simdim.simdim(google, keywords, 'work', 'Morality', 'Affluence', 'Religion', rangelow=1850, stand=True)
+simdim.simdim(coha, keywords, 'work', 'Morality', 'Affluence', 'Religion', rangelow=1870, stand=True)
 
-
-simdimnew.simdimnew(google, keywords, 'work', 'Morality', 'Affluence', 'Religion')
 
 
 # tests:
@@ -151,26 +147,53 @@ keywords['work'] = [
     "employment", "employed"
 ]
 
+# find related terms
+for  year, model in google.items():
+    print(year, model.most_similar(positive=keywords['work']))
+
+# check coha keywords availability
+
+    for year, model in coha.items():
+            for term in keywords['work']:
+                if model[term].all() == coha[1810]['biology'].all():
+                    print('Keyword ', term, ' not available for ', year)
+
+keywords['work2'] = [
+    "work", "works", "worked", "working", "job",
+    "career",
+    "profession", "professional",
+    "occupation",
+    "employment", "employed"
+]
+
+# find related terms
+for  year, model in coha.items():
+    print(year, model.most_similar(positive=keywords['work2']))
 
 keywords['Extrinsic'] = [
-                    "earn", "earning", "earnings",
+                    "earn", "earning", "earnings", "money",
                     "wage", "wages", "salary", "income", "remuneration", "pay",
-                    "secure", "security", "insecure", "insecurity"
 ]
-
+#discarded because of theory: "secure", "security", "insecure", "insecurity"
 
 keywords['Intrinsic'] = [
-    "interesting", "boring", "fulfilling", "useful", "useless",
-    "expression", "creative", "express", "satisfying", "stimulating", "expressive", "important"
+    "interesting", "interest", "interested",
+    "boring", "bore", "bored",
+    "fulfilling", "fulfill", "fulfilled",
+    "stimulate", "stimulating", "stimulation",
+    "product"
 ]
+# temp discard:    "useful", "useless",
+#     "expression", "express", "expressive",
+#     "satisfy", "satisfying", "satisfied",
 
-
+coha[1990].n_similarity(keywords['work'], ['product'])
 
 simdim.simdim(google, keywords, 'work', 'Extrinsic', 'Intrinsic', rangelow=1850, stand=False)
-simdim.simdim(coha, keywords, 'work', 'Extrinsic', 'Intrinsic', rangelow=1850)
+simdim.simdim(coha, keywords, 'work2', 'Extrinsic', 'Intrinsic', rangelow=1870, stand=False)
 
 simdim.simdim(google, keywords, 'work', 'Extrinsic', 'Intrinsic', rangelow=1850, stand=True)
-simdim.simdim(coha, keywords, 'work', 'Extrinsic', 'Intrinsic', rangelow=1850, stand=True)
+simdim.simdim(coha, keywords, 'work2', 'Extrinsic', 'Intrinsic', rangelow=1870, stand=True)
 
 
 
@@ -209,12 +232,12 @@ for  year, model in google.items():
     print(year, model.most_similar(positive=keywords['liberal']))
 
 simdim.simdim(google, keywords, 'econ', 'liberal', 'intervention', rangelow=1850, stand=False)
-simdim.simdim(coha, keywords, 'econ', 'liberal', 'intervention', rangelow=1850, stand=False)
+simdim.simdim(coha, keywords, 'econ', 'liberal', 'intervention', rangelow=1870, stand=False)
 
 simdim.simdim(google, keywords, 'econ', 'liberal', 'intervention', rangelow=1850, stand=True)
-simdim.simdim(coha, keywords, 'econ', 'liberal', 'intervention', rangelow=1850, stand=True)
+simdim.simdim(coha, keywords, 'econ', 'liberal', 'intervention', rangelow=1870, stand=True)
 
-# laissez & liberalism not available until 1880
+
 
 
 
@@ -276,11 +299,11 @@ keywords['develop'] = [
 for  year, model in google.items():
     print(year, model.most_similar(positive=keywords['develop']))
 
-simdim.simdim(google, keywords, 'Education', 'develop', 'econ', rangelow=1850, ci=0)
-simdim.simdim(coha, keywords, 'Education', 'develop', 'econ', rangelow=1850, ci=0)
+simdim.simdim(google, keywords, 'Education', 'develop', 'econ', rangelow=1850)
+simdim.simdim(coha, keywords, 'Education', 'develop', 'econ', rangelow=1870)
 
-
-simdimnew.simdimnew(google, keywords, 'Education', 'develop', 'econ')
+simdim.simdim(google, keywords, 'Education', 'develop', 'econ', rangelow=1850, stand=True)
+simdim.simdim(coha, keywords, 'Education', 'develop', 'econ', rangelow=1870, stand = True)
 
 
 
@@ -299,11 +322,11 @@ keywords['health'] = [
 ]
 #discarded: "diagnose", "therapy"
 
-simdim.simdim(google, keywords, 'medicine', 'health', 'econ', rangelow=1850, ci=0)
-simdim.simdim(coha, keywords, 'medicine', 'health', 'econ', rangelow=1850, ci=0)
+simdim.simdim(google, keywords, 'medicine', 'health', 'econ', rangelow=1850)
+simdim.simdim(coha, keywords, 'medicine', 'health', 'econ', rangelow=1870)
 
-
-simdimnew.simdimnew(google, keywords, 'medicine', 'health', 'econ')
+simdim.simdim(google, keywords, 'medicine', 'health', 'econ', rangelow=1850, stand=True)
+simdim.simdim(coha, keywords, 'medicine', 'health', 'econ', rangelow=1870, stand=True)
 
 
 
@@ -333,94 +356,11 @@ keywords['scientific'] = [
 for  year, model in google.items():
     print(year, model.most_similar(positive=keywords['scientific']))
 
-simdim.simdim(google, keywords, 'science', 'scientific', 'econ', rangelow=1850, ci=0)
-simdim.simdim(coha, keywords, 'science', 'scientific', 'econ', rangelow=1850, ci=0)
+simdim.simdim(google, keywords, 'science', 'scientific', 'econ', rangelow=1850)
+simdim.simdim(coha, keywords, 'science', 'scientific', 'econ', rangelow=1870)
 
-
-simdimnew.simdimnew(google, keywords, 'science', 'scientific', 'econ')
-
-
-
-
-
-
-
-
-
-##### NOT INCLUDED IN PAPER #####
-
-
-#%% moralische Bewertung von Ungleichheit & Steuern
-
-
-keywords['just'] = [
-    "good", "just", "justice", "fair"
-]
-
-keywords['unjust'] = [
-    "evil", "immoral", "bad", "unjust", "injustice", "unfair"
-]
-
-
-keywords['inequality'] = [
-    "inequality", "unequal", "inequalities", "disparity"
-]
-
-keywords['taxes'] = [
-    "taxes", "taxation", "tax"
-]
-
-keywords['unemployment'] = [
-    "unemployed", "unemployment"
-]
-
-
-# check if all terms exist in all embeddings
-for i in keywords['inequality']:
-    for year, model in models_all.items():
-        if model[i].all() == models_all[1840]['biology'].all():
-            if year >= 180:
-                print(str(year) + ": " + i)
-
-simdim.simdim(models_all, keywords, 'inequality', 'just', 'unjust', ci=0)
-
-simdim.simdim(models_all, keywords, 'taxes', 'just', 'unjust', ci=0)
-
-simdim.simdim(models_all, keywords, 'poor', 'just', 'unjust', ci=0)
-simdim.simdim(models_all, keywords, 'rich', 'just', 'unjust', ci=0)
-simdim.simdim(models_all, keywords, 'Affluence', 'just', 'unjust', ci=0)
-
-simdim.simdim(models_all, keywords, 'unemployment', 'just', 'unjust', ci=0)
-
-
-
-#%% Meritocracy
-
-
-keywords['rich'] = ["wealth", "wealthy", "rich", "affluence", "affluent"]
-keywords['poor'] = ["poor", "poverty", "impoverished", "destitute", "needy"]
-
-keywords['Affluence'] = keywords['rich'] + keywords['poor']
-
-
-keywords['merit'] = [
-    "merit", "deserve", "deserved"
-]
-
-keywords['luck'] = [
-    "luck", "lucky", "random", "inherit", "inherited", "unlucky"
-]
-
-
-
-# check if all terms exist in all embeddings
-for i in keywords['taxes']:
-    for year, model in models_all.items():
-        if model[i].all() == models_all[1840]['biology'].all():
-            if year >= 1850:
-                print(str(year) + ": " + i)
-
-simdim.simdim(models_all, keywords, 'Affluence', 'merit', 'luck', ci=0)
+simdim.simdim(google, keywords, 'science', 'scientific', 'econ', rangelow=1850, stand=True)
+simdim.simdim(coha, keywords, 'science', 'scientific', 'econ', rangelow=1870, stand=True)
 
 
 
@@ -428,37 +368,6 @@ simdim.simdim(models_all, keywords, 'Affluence', 'merit', 'luck', ci=0)
 
 
 
-#%% Economy: privat profits vs. social benefits
-
-
-keywords['econ'] = [
-    "economy", "invest", "economic", "business", "money", "trade"
-]
-
-keywords['private'] = [
-    "private", "profit", "profits", "gain", "money", "revenue", "earn", "income"
-]
-
-keywords['public'] = [
-    "social", "benefit", "benefits", "welfare", "society",
-    "community", "public", "wellbeing", "promote"
-]
-
-
-
-# check if all terms exist in all embeddings
-for i in keywords['social']:
-    for year, model in models_all.items():
-        if model[i].all() == models_all[1840]['biology'].all():
-            if year >= 1880:
-                print(str(year) + ": " + i)
-
-#most similar terms by decade
-for x, y in models_all.items():
-    print(x)
-    print(y.most_similar("profit"))
-
-simdim.simdim(models_all, keywords, 'econ', 'private', 'public', ci=0)
 
 
 
