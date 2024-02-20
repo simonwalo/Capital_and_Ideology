@@ -158,16 +158,19 @@ keywords['Extrinsic'] = [
                     "secure", "security", "insecure", "insecurity"
 ]
 
+
 keywords['Intrinsic'] = [
     "interesting", "boring", "fulfilling", "useful", "useless",
     "expression", "creative", "express", "satisfying", "stimulating", "expressive", "important"
 ]
 
-simdim.simdim(google, keywords, 'work', 'Extrinsic', 'Intrinsic', rangelow=1850, ci=00)
-simdim.simdim(coha, keywords, 'work', 'Extrinsic', 'Intrinsic', rangelow=1850, ci=00)
 
-simdimnew.simdimnew(google, keywords, 'work', 'Extrinsic', 'Intrinsic')
-simdimnew.simdimnew(coha, keywords, 'work', 'Extrinsic', 'Intrinsic')
+
+simdim.simdim(google, keywords, 'work', 'Extrinsic', 'Intrinsic', rangelow=1850, stand=False)
+simdim.simdim(coha, keywords, 'work', 'Extrinsic', 'Intrinsic', rangelow=1850)
+
+simdim.simdim(google, keywords, 'work', 'Extrinsic', 'Intrinsic', rangelow=1850, stand=True)
+simdim.simdim(coha, keywords, 'work', 'Extrinsic', 'Intrinsic', rangelow=1850, stand=True)
 
 
 
@@ -202,14 +205,15 @@ keywords['liberal'] = [
 #discarded:
 
 # find related terms
-for  year, model in models_all.items():
+for  year, model in google.items():
     print(year, model.most_similar(positive=keywords['liberal']))
 
-simdim.simdim(models_all, keywords, 'econ', 'liberal', 'intervention', rangelow=1850, ci=0)
-simdim.simdim(coha, keywords, 'econ', 'liberal', 'intervention', rangelow=1850, ci=0)
+simdim.simdim(google, keywords, 'econ', 'liberal', 'intervention', rangelow=1850, stand=False)
+simdim.simdim(coha, keywords, 'econ', 'liberal', 'intervention', rangelow=1850, stand=False)
 
+simdim.simdim(google, keywords, 'econ', 'liberal', 'intervention', rangelow=1850, stand=True)
+simdim.simdim(coha, keywords, 'econ', 'liberal', 'intervention', rangelow=1850, stand=True)
 
-simdimnew.simdimnew(models_all, keywords, 'econ', 'liberal', 'intervention', rangelow=1880)
 # laissez & liberalism not available until 1880
 
 
@@ -243,11 +247,11 @@ keywords['power'] = [
     "power", "rule", "influence", "law", "laws", "authority", "sovereign", "control", "command"
 ]
 
-simdim.simdim(google, keywords, 'Politics', 'econ', 'power', rangelow=1850, ci=0)
-simdim.simdim(coha, keywords, 'Politics', 'econ', 'power', rangelow=1850, ci=0)
+simdim.simdim(google, keywords, 'Politics', 'econ', 'power', rangelow=1850, stand=False)
+simdim.simdim(coha, keywords, 'Politics', 'econ', 'power', rangelow=1850, stand=False)
 
-simdimnew.simdimnew(models_all, keywords, 'Politics', 'econ', 'power')
-
+simdim.simdim(google, keywords, 'Politics', 'econ', 'power', rangelow=1850, stand=True)
+simdim.simdim(coha, keywords, 'Politics', 'econ', 'power', rangelow=1850, stand=True)
 
 
 ### education ###

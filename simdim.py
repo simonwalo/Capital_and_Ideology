@@ -15,78 +15,100 @@ import matplotlib.lines as mlines
 
 
 
-def simdim(models, keywords, key, *dims, rangelow=1850, rangehigh=2000, rangestep=10, ci=95, bootstrap=1000):
+def simdim(models, keywords, key, *dims, rangelow=1850, rangehigh=2000, rangestep=10, stand=False):
 
-    medians = pd.DataFrame()
-    lower_cis = pd.DataFrame()
-    upper_cis = pd.DataFrame()
 
-    for dim in dims:
-        data = pd.DataFrame(index=range(len(range(rangelow, rangehigh, rangestep))), columns=range(bootstrap))
+    # check if all terms exist in all models
+    for year, model in models.items():
+        if year in range(rangelow, rangehigh, rangestep):
+            for term in keywords[key]:
+                if model[term].all() == models[1810]['biology'].all():
+                    print('Keyword ', term, ' not available for ', year)
+                    return
+            for dim in dims:
+                for term in keywords[dim]:
+                    if model[term].all() == models[1810]['biology'].all():
+                        print('Keyword ', term, ' not available for ', year)
+                        return
 
-        for i in range(bootstrap):
 
-            sample1 = keywords[key]
-            sample2 = random.choices(keywords[dim], k=len(keywords[dim]))
+    # get raw distances
+    if stand == False:
 
+        similarities = pd.DataFrame()
+
+        for dim in dims:
             d = []
             for year, model in models.items():
                 if year in range(rangelow, rangehigh, rangestep):
-                    d.append(model.n_similarity(sample1, sample2))
-            d = np.asarray(d)
-            data[i] = d
+                    d.append(model.n_similarity(keywords[key], keywords[dim]))
+            similarities[dim] = d
 
-        # get medians
-        temp = []
-        for i in range(len(range(rangelow, rangehigh, rangestep))):
-            sample = data.iloc[i]
-            temp.append(sample.median())
-        medians[dim] = temp
+    # get standardized distances
+    if stand == True:
 
-        # get 95% intervals
-        alpha = 100 - ci
+        # get similarity between anchor and all words per year
 
-        # get lowers CIs
-        temp = []
-        for i in range(len(range(rangelow, rangehigh, rangestep))):
-            sample = data.iloc[i]
-            temp.append(np.percentile(sample, alpha / 2))
-        lower_cis[dim] = temp
+        similarities = pd.DataFrame()
 
-        # get upper CIs
-        temp = []
-        for i in range(len(range(rangelow, rangehigh, rangestep))):
-            sample = data.iloc[i]
-            temp.append(np.percentile(sample, 100 - alpha / 2))
-        upper_cis[dim] = temp
+        fulltable = pd.DataFrame()
 
-    # the trendline
+        for year, model in models.items():
+            if year in range(rangelow, rangehigh, rangestep):
+                allkeys = list(model.key_to_index.keys())
+                templist = []
+
+                for term in allkeys:
+                    d = model.n_similarity(keywords[key], [term])
+                    templist.append(d)
+
+                data = pd.DataFrame()
+                data.index = allkeys
+                data[year] = templist
+
+                fulltable = fulltable.merge(data, left_index=True, right_index=True, how='right')
+
+        # standardize dataframe
+        fulltablestand = (fulltable - fulltable.mean()) / fulltable.std()
+
+        # calculate mean distance for each dim
+        for dim in dims:
+            # only keep values for relevant keys
+            dimtable = fulltablestand[fulltablestand.index.isin(keywords[dim])]
+
+            # calculate mean values per year
+            similarities[dim] = dimtable.mean()
+
+
+    # plot the trendline
 
     x = range(rangelow, rangehigh, rangestep)
     xnew = np.linspace(rangelow, (rangehigh - 10), 100)
 
-    n = len(dims)
     markslist = ['o', 's']
     marks = iter(markslist)
 
     for dim in dims:
-        y = medians[dim].tolist()
+        y = similarities[dim].tolist()
         fun = interp1d(x, y, kind='cubic')
-
-        low = lower_cis[dim].tolist()
-        fun_low = interp1d(x, low, kind='cubic')
-
-        high = upper_cis[dim].tolist()
-        fun_high = interp1d(x, high, kind='cubic')
-
         plt.plot(xnew, fun(xnew), "-", x, y, next(marks), color='black')
-        plt.fill_between(xnew, fun_low(xnew), fun_high(xnew), alpha=0.2, color='grey')
-
 
     # add legend and labels
-    legend1 = mlines.Line2D([], [], color='black', marker='o', label=dims[0])
-    legend2 = mlines.Line2D([], [], color='black', marker='s', label=dims[1])
-    plt.legend(handles=[legend1, legend2], loc='center left', bbox_to_anchor=(1, 0.5))
+    if len(dims) == 1:
+        legend1 = mlines.Line2D([], [], color='black', marker='o', label=dims[0])
+        plt.legend(handles=[legend1], loc='center left', bbox_to_anchor=(1, 0.5))
+
+    if len(dims) == 2:
+        legend1 = mlines.Line2D([], [], color='black', marker='o', label=dims[0])
+        legend2 = mlines.Line2D([], [], color='black', marker='s', label=dims[1])
+        plt.legend(handles=[legend1, legend2], loc='center left', bbox_to_anchor=(1, 0.5))
+
+    if len(dims) == 3:
+        legend1 = mlines.Line2D([], [], color='black', marker='o', label=dims[0])
+        legend2 = mlines.Line2D([], [], color='black', marker='s', label=dims[1])
+        legend3 = mlines.Line2D([], [], color='black', marker='x', label=dims[2])
+
+        plt.legend(handles=[legend1, legend2, legend3], loc='center left', bbox_to_anchor=(1, 0.5))
 
     plt.xlabel("Year")
     plt.ylabel("Cosine Similarity")
@@ -96,9 +118,6 @@ def simdim(models, keywords, key, *dims, rangelow=1850, rangehigh=2000, rangeste
     # show plot
     plt.show()
     plt.close()
-
-
-
 
 
 
