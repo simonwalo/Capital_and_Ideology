@@ -40,10 +40,12 @@ def simdim(models, keywords, key, *dims, rangelow=1850, rangehigh=2000, rangeste
 
     countskey = Counter(cleankeydict[key])
     cleankeydict[key] = [elem for elem, count in countskey.items() if count == len(range(rangelow, rangehigh, rangestep))]
+    print(key, ':', cleankeydict[key])
     for dim in dims:
         countsdim = Counter(cleankeydict[dim])
         cleankeydict[dim] = [elem for elem, count in countsdim.items() if
                              count == len(range(rangelow, rangehigh, rangestep))]
+        print(dim, ':', cleankeydict[dim])
 
     # get raw distances
     if stand == False:
