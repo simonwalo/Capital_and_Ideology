@@ -371,5 +371,24 @@ simdim.simdim(coha, keywords, 'science', 'scientific', 'econ', rangelow=1870, st
 
 
 
+#%% Economy: privat profits vs. social benefits
 
 
+keywords['econ'] = [
+    "economy", "invest", "economic", "business", "money", "trade"
+]
+
+keywords['private'] = [
+    "private", "profit", "profits", "gain", "money", "revenue", "earn", "income"
+]
+
+keywords['public'] = [
+    "social", "benefit", "benefits", "welfare", "society",
+    "community", "public", "wellbeing"
+]
+
+simdim.simdim(google, keywords, 'econ', 'private', 'public', rangelow=1850)
+simdim.simdim(coha, keywords, 'econ', 'private', 'public', rangelow=1870)
+
+simdim.simdim(google, keywords, 'econ', 'private', 'public', rangelow=1850, stand = True)
+simdim.simdim(coha, keywords, 'econ', 'private', 'public', rangelow=1870, stand=True)
