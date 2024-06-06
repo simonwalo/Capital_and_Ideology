@@ -3,6 +3,7 @@
 import semchange
 import simdim
 from gensim.models import KeyedVectors
+import matplotlib.pyplot as plt
 
 
 #%% load data
@@ -61,143 +62,12 @@ keywords = dict()
 
 for x, y in google.items():
     print(x)
-    print(y.most_similar("market"))
+    print(y.most_similar("gdp"))
 
 
 #%% visualize semantic change over time (PCA with keyword as passive projection)
 
 semchange.semchange(google, "work", rangelow=1810, rangehigh=2000, rangestep=60, export=False)
-
-
-#%% Protestant Ethic
-
-
-keywords['work'] = [
-    "work", "works", "worked", "working", "job", "jobs",
-    "career",
-    "profession", "professions", "professional",
-    "occupation", "occupations",
-    "employment", "employed",
-    "labor", "labors", 'labour', 'labours'
-]
-
-# discarded: careers
-
-
-keywords['rich'] = ["wealth", "wealthy", "rich", "affluence", "affluent"]
-keywords['poor'] = ["poor", "poverty", "impoverished", "destitute", "needy"]
-
-keywords['Affluence'] = keywords['rich'] + keywords['poor']
-
-
-
-keywords['Religion'] = [
-    "redemption", "salvation", "god", "religion", "holy", "calling", "faith", "pious",
-    "spiritual", "sacred", "divine", "belief", "worship"
-]
-
-
-
-keywords['moralpos'] = [
-    "good", "moral", "honest", "virtuous", "virtue", "decent", "noble",
-    "honour", "integrity", "worth", "dignity", "just", "justice"
-]
-
-keywords['moralneg'] = [
-    "evil", "immoral", "bad", "dishonest", "sinful", "vice", "unjust", "injustice"
-]
-
-
-keywords['Morality'] = [
-    'good', 'evil', 'moral', 'immoral', 'good', 'bad', 'honest', 'dishonest',
-    'virtuous', 'sinful', 'virtue', 'vice',
-    "decent", "noble", "honour", "integrity", "worth", "dignity"
-]
-
-simdim.simdim(google, keywords, 'work', 'Morality', 'Affluence', 'Religion', rangelow=1850, stand=False)
-simdim.simdim(coha, keywords, 'work', 'Morality', 'Affluence', 'Religion', rangelow=1870, stand=False)
-
-simdim.simdim(google, keywords, 'work', 'Morality', 'Affluence', 'Religion', rangelow=1850, stand=True)
-simdim.simdim(coha, keywords, 'work', 'Morality', 'Affluence', 'Religion', rangelow=1870, stand=True)
-
-
-
-# tests:
-
-keywords['identity'] = [
-    "identity", "fulfilling", "expression", "express"
-]
-
-#simdim.simdim(models_all, keywords, 'work', 'rich', 'poor', ci=0)
-#simdim.simdim(models_all, keywords, 'work', 'moralpos', 'moralneg', ci=0)
-
-#simdim.simdim(models_all, keywords, 'work', 'identity', 'Religion', ci=0)
-
-
-
-
-
-#%% Alienation
-
-keywords['work'] = [
-    "work", "works", "worked", "working", "job", "jobs",
-    "career",
-    "profession", "professions", "professional",
-    "occupation", "occupations",
-    "employment", "employed"
-]
-
-# find related terms
-for  year, model in google.items():
-    print(year, model.most_similar(positive=keywords['work']))
-
-# check coha keywords availability
-
-    for year, model in coha.items():
-            for term in keywords['work']:
-                if model[term].all() == coha[1810]['biology'].all():
-                    print('Keyword ', term, ' not available for ', year)
-
-keywords['work2'] = [
-    "work", "works", "worked", "working", "job",
-    "career",
-    "profession", "professional",
-    "occupation",
-    "employment", "employed"
-]
-
-# find related terms
-for  year, model in coha.items():
-    print(year, model.most_similar(positive=keywords['work2']))
-
-keywords['Extrinsic'] = [
-                    "earn", "earning", "earnings", "money",
-                    "wage", "wages", "salary", "income", "remuneration", "pay",
-]
-#discarded because of theory: "secure", "security", "insecure", "insecurity"
-
-keywords['Intrinsic'] = [
-    "interesting", "interest", "interested",
-    "boring", "bore", "bored",
-    "fulfilling", "fulfill", "fulfilled",
-    "stimulate", "stimulating", "stimulation",
-    "product"
-]
-# temp discard:    "useful", "useless",
-#     "expression", "express", "expressive",
-#     "satisfy", "satisfying", "satisfied",
-
-coha[1990].n_similarity(keywords['work'], ['product'])
-
-simdim.simdim(google, keywords, 'work', 'Extrinsic', 'Intrinsic', rangelow=1850, stand=False)
-simdim.simdim(coha, keywords, 'work2', 'Extrinsic', 'Intrinsic', rangelow=1870, stand=False)
-
-simdim.simdim(google, keywords, 'work', 'Extrinsic', 'Intrinsic', rangelow=1850, stand=True)
-simdim.simdim(coha, keywords, 'work2', 'Extrinsic', 'Intrinsic', rangelow=1870, stand=True)
-
-
-
-
 
 
 
@@ -215,27 +85,332 @@ keywords['econ'] = [
 ]
 
 
-
-keywords['intervention'] = [
-    "regulate", "intervention", "regulated", "govern", "regulation", "restrict",
-    "prohibit", "control", "prescribe"
+keywords['econ'] = [
+    "economy", "economic",
+    "invest", "investment",
+    "business", "businesses",
+    "enterprise", "enterprises",
+    "trade", "trades", "trading",
+    "commerce", "commercial",
+    "manufacture", "manufactures",
+    "industry", "industries",
+    "market", "markets",
+    'corporation', 'corporations',
+    'production'
 ]
 
-keywords['liberal'] = [
-    "free", "unfettered", "freedom", "faire", "laissez", "liberalism", 'liberty'
+
+
+keywords['Regulation'] = [
+    "regulate", "regulated", "regulation", "regulations", #sinkt
+    "intervene", "intervention", "interventions", #steigt
+    "govern", "government", "governments", #steigt
+    "restrict", "restriction", "restrictions", #sinkt
+    "prohibit", "prohibition", #sinkt
+    "control", "controlled" #sinkt
+]
+
+keywords['Regulation'] = [
+    "regulate", "regulated", "regulation", "regulations", "regulating",
+    "intervene", "intervening", "intervention", "interventions",
+    "restrict", "restriction", "restrictions", "restricting", "restricted",
+    "prohibit", "prohibition", "prohibitions", "prohibiting", "prohibited",
+    "control", "controlled", "controlling"
+]
+
+keywords['Liberalism'] = [
+    "liberal", "liberalism",
+    'liberty', "liberties",
+    "free", "freedom",
+    "unfettered",
+    "faire", "laissez",
+    "liberalize", "liberalization",
+    'deregulate', 'deregulation', "deregulated",
+    "open"
 ]
 
 #discarded:
 
 # find related terms
 for  year, model in google.items():
-    print(year, model.most_similar(positive=keywords['liberal']))
+    print(year, model.most_similar(positive=keywords['Liberalism']))
 
-simdim.simdim(google, keywords, 'econ', 'liberal', 'intervention', rangelow=1850, stand=False)
-simdim.simdim(coha, keywords, 'econ', 'liberal', 'intervention', rangelow=1870, stand=False)
 
-simdim.simdim(google, keywords, 'econ', 'liberal', 'intervention', rangelow=1850, stand=True)
-simdim.simdim(coha, keywords, 'econ', 'liberal', 'intervention', rangelow=1870, stand=True)
+
+
+simdim.simdim(google, keywords, 'econ', 'Liberalism', 'Regulation', rangelow=1850, stand=False)
+simdim.simdim(coha, keywords, 'econ', 'Liberalism', 'Regulation', rangelow=1850, stand=False)
+
+
+
+ax1 = simdim.simdim(google, keywords, 'econ', 'Liberalism', 'Regulation', rangelow=1850, stand=True)
+ax2 = simdim.simdim(coha, keywords, 'econ', 'Liberalism', 'Regulation', rangelow=1850, stand=True)
+
+fig, (new_ax1, new_ax2) = plt.subplots(1, 2, figsize=(10, 5), sharey=True)
+
+line1 = ax1.get_lines()[0]  # Get the first line from ax1
+new_ax1.plot(line1.get_xdata(), line1.get_ydata(), label='Liberalism', color='C0')
+offsets1 = ax1.collections[0].get_offsets()
+new_ax1.scatter(offsets1[:, 0], offsets1[:, 1], color='C0')
+
+line2 = ax1.get_lines()[1]  # Get the second line from ax1
+new_ax1.plot(line2.get_xdata(), line2.get_ydata(), label='Regulation', color='C1')
+offsets2 = ax1.collections[1].get_offsets()
+new_ax1.scatter(offsets2[:, 0], offsets2[:, 1], color='C1')
+
+new_ax1.set_title('Google')
+new_ax1.set_ylabel("Cosine Similarity (std)")
+new_ax1.set_xticks(range(1850, 2000, 20))
+
+line3 = ax2.get_lines()[0]  # Get the first line from ax2
+new_ax2.plot(line3.get_xdata(), line3.get_ydata(), label='Liberalism', color='C0')
+offsets3 = ax2.collections[0].get_offsets()
+new_ax2.scatter(offsets3[:, 0], offsets3[:, 1], color='C0')
+
+
+line4 = ax2.get_lines()[1]  # Get the second line from ax2
+new_ax2.plot(line4.get_xdata(), line4.get_ydata(), label='Regulation', color='C1')
+offsets4 = ax2.collections[1].get_offsets()
+new_ax2.scatter(offsets4[:, 0], offsets4[:, 1], color='C1')
+
+new_ax2.set_title('COHA')
+new_ax2.set_xticks(range(1850, 2000, 20))
+new_ax2.yaxis.set_tick_params(labelleft=True)
+
+handles, labels = new_ax1.get_legend_handles_labels()
+fig.legend(handles, labels, loc='lower center', ncol=2)
+
+plt.show()
+
+
+
+
+
+#%% Meritocracy
+
+
+keywords['Work'] = [
+    "work", "works", "worked", "working",
+    "job", "jobs",
+    "career", "careers",
+    "employment", "employed",
+    "labor", "labors", 'labour', 'labours'
+]
+
+# discarded:
+#"profession", "professions", "professional",
+#"occupation", "occupations",
+
+keywords['rich'] = [
+    "wealth", "wealthy",
+    "rich", "riches",
+    "affluence", "affluent",
+    "opulent", "opulence",
+    'luxury', 'luxurious',
+    'prosperity', 'prosperous'
+]
+
+keywords['poor'] = [
+    "poor", 'poorer', 'poorest',
+    "poverty", "impoverished",
+    'indigent', 'necessitous',
+    "destitute", "needy"
+]
+
+keywords['Affluence'] = keywords['rich'] + keywords['poor']
+
+
+keywords['merit'] = [
+    'merit', 'merits', 'merited', # nimmt ab, coha zu
+    'deserve', 'deserved', 'deserves', 'deserving', # nimmt zu
+    'just', 'justice', 'justly', #nimmt zu
+    "effort", # nimmt leicht zu
+    'perform', 'performance', # leichte zunahme, coha abnahme
+    'reward', 'rewards', 'rewarded' #google abnahme, coha zunahme
+    'accomplish', 'accomplishment',  # leichte zunahme, coha zunahme
+    'achieve', 'achievement', # konstant, coha abnahme
+]
+#discarded:
+# 'fair', 'fairness' (polysemy)
+#
+# 'talent', 'talents',  # zunahme, coha abnahme
+# 'skill', 'skills',  # konstant, coha abnahme
+# 'able', 'ability', 'abilities'  # konstant, coha abnahme
+#
+
+
+keywords['luck'] = [
+    'luck', 'lucky', 'unlucky'
+    'chance', 'chances',
+    'fortunate', 'unfortunate'
+]
+
+keywords['Inheritance'] = [
+    'inherit', 'inherited', 'inheritance', 'heir', 'heirs',
+    'inheritor', 'inheritors', 'hereditary', 'heritage',
+    'family', 'families',
+    'father', 'fathers',
+    'mother', 'mothers',
+    'son', 'sons', 'daughter', 'daughters',
+    'descendent', 'descendents',
+    'ancestor', 'ancestors'
+]
+
+
+
+keywords['luckinherit'] = keywords['luck'] + keywords['inherit']
+
+# find related terms
+for year, model in google.items():
+    print(year, model.most_similar(positive=keywords['Inheritance']))
+
+for year, model in google.items():
+    print(year, model.most_similar(positive=['Inheritance']))
+
+
+simdim.simdim(google, keywords, 'Affluence', 'Work', 'Inheritance', rangelow=1850, stand=False)
+simdim.simdim(coha, keywords, 'Affluence', 'Work', 'Inheritance', rangelow=1850, stand=False)
+
+ax1 = simdim.simdim(google, keywords, 'Affluence', 'Work', 'Inheritance', rangelow=1850, stand=True)
+ax2 = simdim.simdim(coha, keywords, 'Affluence',  'Work', 'Inheritance', rangelow=1850, stand=True)
+
+
+fig, (new_ax1, new_ax2) = plt.subplots(1, 2, figsize=(10, 5), sharey=True)
+
+line1 = ax1.get_lines()[0]  # Get the first line from ax1
+new_ax1.plot(line1.get_xdata(), line1.get_ydata(), label='Work', color='C0')
+offsets1 = ax1.collections[0].get_offsets()
+new_ax1.scatter(offsets1[:, 0], offsets1[:, 1], color='C0')
+
+line2 = ax1.get_lines()[1]  # Get the second line from ax1
+new_ax1.plot(line2.get_xdata(), line2.get_ydata(), label='Inheritance', color='C1')
+offsets2 = ax1.collections[1].get_offsets()
+new_ax1.scatter(offsets2[:, 0], offsets2[:, 1], color='C1')
+
+new_ax1.set_title('Google')
+new_ax1.set_ylabel("Cosine Similarity (std)")
+new_ax1.set_xticks(range(1850, 2000, 20))
+
+line3 = ax2.get_lines()[0]  # Get the first line from ax2
+new_ax2.plot(line3.get_xdata(), line3.get_ydata(), label='Work', color='C0')
+offsets3 = ax2.collections[0].get_offsets()
+new_ax2.scatter(offsets3[:, 0], offsets3[:, 1], color='C0')
+
+
+line4 = ax2.get_lines()[1]  # Get the second line from ax2
+new_ax2.plot(line4.get_xdata(), line4.get_ydata(), label='Inheritance', color='C1')
+offsets4 = ax2.collections[1].get_offsets()
+new_ax2.scatter(offsets4[:, 0], offsets4[:, 1], color='C1')
+
+new_ax2.set_title('COHA')
+new_ax2.set_xticks(range(1850, 2000, 20))
+new_ax2.yaxis.set_tick_params(labelleft=True)
+
+handles, labels = new_ax1.get_legend_handles_labels()
+fig.legend(handles, labels, loc='lower center', ncol=2)
+
+plt.show()
+
+
+
+
+
+
+
+#%% Intrinsic vs. Extrinsic Work Motivation
+
+
+keywords['work'] = [
+    "work", "works", "worked", "working",
+    "job", "jobs",
+    "career", "careers",
+    "employment", "employed",
+    "labor", "labors", 'labour', 'labours'
+]
+
+#discarded:
+# "profession", "professions", "professional",
+#     "occupation", "occupations",
+
+keywords['Extrinsic'] = [
+    "earn", "earning", "earnings",
+    "money",
+    "wage", "wages",
+    "salary", 'salaries',
+    "income", 'incomes',
+    "remuneration",
+    "pay", 'pays', 'paying', 'payment',
+    'compensation', 'compensations'
+]
+
+
+keywords['Intrinsic'] = [
+    "interesting", "interest", "interested",
+    "fulfilling", "fulfill", "fulfilled",
+    "stimulate", "stimulating", "stimulation",
+    "satisfy", "satisfying", "satisfied", 'satisfaction',
+    "expression", "express", "expressive",
+    'meaning', 'meaningful'
+]
+
+# temp discard:
+#"meaningless"
+ #   "useful", "useless",
+#    "boring", "bore", "bored"
+
+# find related terms
+for  year, model in google.items():
+    print(year, model.most_similar(positive=keywords['work']))
+
+for  year, model in coha.items():
+    print(year, model.most_similar(positive=['wage', 'salary']))
+
+simdim.simdim(google, keywords, 'work', 'Extrinsic', 'Intrinsic', rangelow=1850, stand=False)
+simdim.simdim(coha, keywords, 'work', 'Extrinsic', 'Intrinsic', rangelow=1850, stand=False)
+
+ax1 = simdim.simdim(google, keywords, 'work', 'Extrinsic', 'Intrinsic', rangelow=1850, stand=True)
+ax2 = simdim.simdim(coha, keywords, 'work', 'Extrinsic', 'Intrinsic', rangelow=1850, stand=True)
+
+fig, (new_ax1, new_ax2) = plt.subplots(1, 2, figsize=(10, 5), sharey=True)
+
+line1 = ax1.get_lines()[0]  # Get the first line from ax1
+new_ax1.plot(line1.get_xdata(), line1.get_ydata(), label='Extrinsic', color='C0')
+offsets1 = ax1.collections[0].get_offsets()
+new_ax1.scatter(offsets1[:, 0], offsets1[:, 1], color='C0')
+
+line2 = ax1.get_lines()[1]  # Get the second line from ax1
+new_ax1.plot(line2.get_xdata(), line2.get_ydata(), label='Intrinsic', color='C1')
+offsets2 = ax1.collections[1].get_offsets()
+new_ax1.scatter(offsets2[:, 0], offsets2[:, 1], color='C1')
+
+new_ax1.set_title('Google')
+new_ax1.set_ylabel("Cosine Similarity (std)")
+new_ax1.set_xticks(range(1850, 2000, 20))
+
+line3 = ax2.get_lines()[0]  # Get the first line from ax2
+new_ax2.plot(line3.get_xdata(), line3.get_ydata(), label='Extrinsic', color='C0')
+offsets3 = ax2.collections[0].get_offsets()
+new_ax2.scatter(offsets3[:, 0], offsets3[:, 1], color='C0')
+
+
+line4 = ax2.get_lines()[1]  # Get the second line from ax2
+new_ax2.plot(line4.get_xdata(), line4.get_ydata(), label='Intrinsic', color='C1')
+offsets4 = ax2.collections[1].get_offsets()
+new_ax2.scatter(offsets4[:, 0], offsets4[:, 1], color='C1')
+
+new_ax2.set_title('COHA')
+new_ax2.set_xticks(range(1850, 2000, 20))
+new_ax2.yaxis.set_tick_params(labelleft=True)
+
+handles, labels = new_ax1.get_legend_handles_labels()
+fig.legend(handles, labels, loc='lower center', ncol=2)
+
+plt.show()
+
+
+
+
+
 
 
 
@@ -250,10 +425,10 @@ simdim.simdim(coha, keywords, 'econ', 'liberal', 'intervention', rangelow=1870, 
 #%% Economization
 
 ### Economic code ###
-keywords['econ'] = [
+keywords['Economic code'] = [
     "profit", "profitable", "cost", "benefit", "sell", "revenue", "gain",
-    "loss", "capital", "invest", "economic", "price", "business", "money", "trade",
-    "pay", "paid", "market"
+    "loss", "capital", "invest", 'economy', "economic", "price", "business", "money", "trade",
+    "pay", "paid", "market", 'markets'
 ]
 #discarded: "maximize", "asset"
 
@@ -266,69 +441,176 @@ keywords['Politics'] = [
 ]
 
 #Political code
-keywords['power'] = [
+keywords['Political code'] = [
     "power", "rule", "influence", "law", "laws", "authority", "sovereign", "control", "command"
 ]
 
-simdim.simdim(google, keywords, 'Politics', 'econ', 'power', rangelow=1850, stand=False)
-simdim.simdim(coha, keywords, 'Politics', 'econ', 'power', rangelow=1850, stand=False)
 
-simdim.simdim(google, keywords, 'Politics', 'econ', 'power', rangelow=1850, stand=True)
-simdim.simdim(coha, keywords, 'Politics', 'econ', 'power', rangelow=1850, stand=True)
+simdim.simdim(google, keywords, 'Politics', 'Political code', 'Economic code', rangelow=1850, stand=False)
+simdim.simdim(coha, keywords, 'Politics', 'Political code', 'Economic code', rangelow=1850, stand=False)
+
+ax1 = simdim.simdim(google, keywords, 'Politics', 'Political code', 'Economic code', rangelow=1850, stand=True)
+ax2 = simdim.simdim(coha, keywords, 'Politics', 'Political code', 'Economic code', rangelow=1850, stand=True)
+
+fig = plt.figure(figsize=(13, 20), layout='constrained')
+(subfig1, subfig2, subfig3, subfig4) = fig.subfigures(4, 1) # create 4x1 subfigures
+(new_ax1, new_ax2) = subfig1.subplots(1, 2, sharey=True)
+(new_ax3, new_ax4) = subfig2.subplots(1, 2, sharey=True)
+(new_ax5, new_ax6) = subfig3.subplots(1, 2, sharey=True)
+(new_ax7, new_ax8) = subfig4.subplots(1, 2, sharey=True)
+
+
+line1 = ax1.get_lines()[0]  # Get the first line from ax1
+new_ax1.plot(line1.get_xdata(), line1.get_ydata(), label='Internal code', color='C0')
+offsets1 = ax1.collections[0].get_offsets()
+new_ax1.scatter(offsets1[:, 0], offsets1[:, 1], color='C0')
+
+line2 = ax1.get_lines()[1]  # Get the second line from ax1
+new_ax1.plot(line2.get_xdata(), line2.get_ydata(), label='Economic code', color='C1')
+offsets2 = ax1.collections[1].get_offsets()
+new_ax1.scatter(offsets2[:, 0], offsets2[:, 1], color='C1')
+
+new_ax1.set_title('Google')
+new_ax1.set_ylabel("Cosine Similarity (std)")
+new_ax1.set_xticks(range(1850, 2000, 20))
+
+line3 = ax2.get_lines()[0]  # Get the first line from ax2
+new_ax2.plot(line3.get_xdata(), line3.get_ydata(), color='C0')
+offsets3 = ax2.collections[0].get_offsets()
+new_ax2.scatter(offsets3[:, 0], offsets3[:, 1], color='C0')
+
+
+line4 = ax2.get_lines()[1]  # Get the second line from ax2
+new_ax2.plot(line4.get_xdata(), line4.get_ydata(), color='C1')
+offsets4 = ax2.collections[1].get_offsets()
+new_ax2.scatter(offsets4[:, 0], offsets4[:, 1], color='C1')
+
+new_ax2.set_title('COHA')
+new_ax2.set_xticks(range(1850, 2000, 20))
+new_ax2.yaxis.set_tick_params(labelleft=True)
+
 
 
 ### education ###
 
 #educational system
 keywords['Education'] = [
-    "education", "school", "teach", "university"
+    "education", "educate",
+    "school", 'schools',
+    "teach", 'teaching', 'teacher', 'teacher',
+    "university", 'universities',
+    'college', 'colleges',
+    'gymnasium',
+    'student', 'students'
 ]
 
-# find related terms
-for  year, model in google.items():
-    print(year, model.most_similar(positive=keywords['Education']))
-
 #educational code
-keywords['develop'] = [
+keywords['Educational code'] = [
     "study", "learn", "development", "develop", "skill", "critical", "thinking", "think", "growth", "empower"
 ]
 #discarded because of data: "skills"
 # discarded because of theory: "equal", "equality", "dignity", "curious", "curiosity", "stimulate", "stimulating"
 
+
+
 # find related terms
 for  year, model in google.items():
-    print(year, model.most_similar(positive=keywords['develop']))
+    print(year, model.most_similar(positive=keywords['Education']))
 
-simdim.simdim(google, keywords, 'Education', 'develop', 'econ', rangelow=1850)
-simdim.simdim(coha, keywords, 'Education', 'develop', 'econ', rangelow=1870)
+simdim.simdim(google, keywords, 'Education', 'Educational code', 'Economic code', rangelow=1850)
+simdim.simdim(coha, keywords, 'Education', 'Educational code', 'Economic code', rangelow=1850)
 
-simdim.simdim(google, keywords, 'Education', 'develop', 'econ', rangelow=1850, stand=True)
-simdim.simdim(coha, keywords, 'Education', 'develop', 'econ', rangelow=1870, stand = True)
+ax3 = simdim.simdim(google, keywords, 'Education', 'Educational code', 'Economic code', rangelow=1850, stand=True)
+ax4 = simdim.simdim(coha, keywords, 'Education', 'Educational code', 'Economic code', rangelow=1850, stand = True)
 
 
+line1 = ax3.get_lines()[0]  # Get the first line from ax3
+new_ax3.plot(line1.get_xdata(), line1.get_ydata(), label='Internal code', color='C0')
+offsets1 = ax3.collections[0].get_offsets()
+new_ax3.scatter(offsets1[:, 0], offsets1[:, 1], color='C0')
+
+line2 = ax3.get_lines()[1]  # Get the second line from ax3
+new_ax3.plot(line2.get_xdata(), line2.get_ydata(), label='Economic code', color='C1')
+offsets2 = ax3.collections[1].get_offsets()
+new_ax3.scatter(offsets2[:, 0], offsets2[:, 1], color='C1')
+
+new_ax3.set_title('Google')
+new_ax3.set_ylabel("Cosine Similarity (std)")
+new_ax3.set_xticks(range(1850, 2000, 20))
+
+line3 = ax4.get_lines()[0]  # Get the first line from ax4
+new_ax4.plot(line3.get_xdata(), line3.get_ydata(), color='C0')
+offsets3 = ax4.collections[0].get_offsets()
+new_ax4.scatter(offsets3[:, 0], offsets3[:, 1], color='C0')
+
+
+line4 = ax4.get_lines()[1]  # Get the second line from ax4
+new_ax4.plot(line4.get_xdata(), line4.get_ydata(), color='C1')
+offsets4 = ax4.collections[1].get_offsets()
+new_ax4.scatter(offsets4[:, 0], offsets4[:, 1], color='C1')
+
+new_ax4.set_title('COHA')
+new_ax4.set_xticks(range(1850, 2000, 20))
+new_ax4.yaxis.set_tick_params(labelleft=True)
 
 
 ### health ###
 
 #health system
 keywords['medicine'] = [
-    "medicine", "medical", "care", "hospital", "doctor", "physician"
+    "medicine", "medical",
+    "hospital", "hospitals",
+    "doctor", "doctors", "physician", "physicians",
+    "clinic", "clinics",
+    "nurse", 'nurses'
 ]
 
 #health code
-keywords['health'] = [
+keywords['Healthcare code'] = [
     "health", "healthy", "welfare", "provision", "provide", "care", "treat",
-    "treatment", "sick", "sickness", "disease",
+    "treatment", "sick", "sickness", "disease", "diagnose", "therapy"
 ]
-#discarded: "diagnose", "therapy"
-
-simdim.simdim(google, keywords, 'medicine', 'health', 'econ', rangelow=1850)
-simdim.simdim(coha, keywords, 'medicine', 'health', 'econ', rangelow=1870)
-
-simdim.simdim(google, keywords, 'medicine', 'health', 'econ', rangelow=1850, stand=True)
-simdim.simdim(coha, keywords, 'medicine', 'health', 'econ', rangelow=1870, stand=True)
 
 
+# find related terms
+for  year, model in google.items():
+    print(year, model.most_similar(positive=keywords['medicine']))
+
+simdim.simdim(google, keywords, 'medicine', 'Healthcare code', 'Economic code', rangelow=1850)
+simdim.simdim(coha, keywords, 'medicine', 'Healthcare code', 'Economic code', rangelow=1850)
+
+ax5 = simdim.simdim(google, keywords, 'medicine', 'Healthcare code', 'Economic code', rangelow=1850, stand=True)
+ax6 = simdim.simdim(coha, keywords, 'medicine', 'Healthcare code', 'Economic code', rangelow=1850, stand=True)
+
+
+line1 = ax5.get_lines()[0]  # Get the first line from ax3
+new_ax5.plot(line1.get_xdata(), line1.get_ydata(), label='Internal code', color='C0')
+offsets1 = ax5.collections[0].get_offsets()
+new_ax5.scatter(offsets1[:, 0], offsets1[:, 1], color='C0')
+
+line2 = ax5.get_lines()[1]  # Get the second line from ax3
+new_ax5.plot(line2.get_xdata(), line2.get_ydata(), label='Economic code', color='C1')
+offsets2 = ax5.collections[1].get_offsets()
+new_ax5.scatter(offsets2[:, 0], offsets2[:, 1], color='C1')
+
+new_ax5.set_title('Google')
+new_ax5.set_ylabel("Cosine Similarity (std)")
+new_ax5.set_xticks(range(1850, 2000, 20))
+
+line3 = ax6.get_lines()[0]  # Get the first line from ax4
+new_ax6.plot(line3.get_xdata(), line3.get_ydata(), color='C0')
+offsets3 = ax6.collections[0].get_offsets()
+new_ax6.scatter(offsets3[:, 0], offsets3[:, 1], color='C0')
+
+
+line4 = ax6.get_lines()[1]  # Get the second line from ax4
+new_ax6.plot(line4.get_xdata(), line4.get_ydata(), color='C1')
+offsets4 = ax6.collections[1].get_offsets()
+new_ax6.scatter(offsets4[:, 0], offsets4[:, 1], color='C1')
+
+new_ax6.set_title('COHA')
+new_ax6.set_xticks(range(1850, 2000, 20))
+new_ax6.yaxis.set_tick_params(labelleft=True)
 
 
 ### science ###
@@ -336,17 +618,15 @@ simdim.simdim(coha, keywords, 'medicine', 'health', 'econ', rangelow=1870, stand
 #science system
 keywords['science'] = [
     "science", "sciences", "scientific", "university", "research", "study", "studies",
-    "physics", "mathematics", "institute", "psychology", "philosophy"
+    "physics", "mathematics", "institute", "psychology", "philosophy",
+    'humanities', 'sociology'
 ]
-#discarded: humanities, sociology
+#discarded:
 
-# find related terms
-for  year, model in google.items():
-    print(year, model.most_similar(positive=keywords['science']))
 
 
 #science code
-keywords['scientific'] = [
+keywords['Scientific code'] = [
     "truth", "true", "untrue", "knowledge", "collective", "discover", "discovery",
     "understand", "understanding", 'comprehend', 'meaning', 'reason',
     "explain", "explanation", "method", "methodical"
@@ -354,17 +634,151 @@ keywords['scientific'] = [
 
 # find related terms
 for  year, model in google.items():
-    print(year, model.most_similar(positive=keywords['scientific']))
+    print(year, model.most_similar(positive=keywords['Scientific code']))
 
-simdim.simdim(google, keywords, 'science', 'scientific', 'econ', rangelow=1850)
-simdim.simdim(coha, keywords, 'science', 'scientific', 'econ', rangelow=1870)
+simdim.simdim(google, keywords, 'science', 'Scientific code', 'Economic code', rangelow=1850)
+simdim.simdim(coha, keywords, 'science', 'Scientific code', 'Economic code', rangelow=1850)
 
-simdim.simdim(google, keywords, 'science', 'scientific', 'econ', rangelow=1850, stand=True)
-simdim.simdim(coha, keywords, 'science', 'scientific', 'econ', rangelow=1870, stand=True)
-
-
+ax7 = simdim.simdim(google, keywords, 'science', 'Scientific code', 'Economic code', rangelow=1850, stand=True)
+ax8 = simdim.simdim(coha, keywords, 'science', 'Scientific code', 'Economic code', rangelow=1850, stand=True)
 
 
+line1 = ax7.get_lines()[0]  # Get the first line from ax3
+new_ax7.plot(line1.get_xdata(), line1.get_ydata(), label='Internal code', color='C0')
+offsets1 = ax7.collections[0].get_offsets()
+new_ax7.scatter(offsets1[:, 0], offsets1[:, 1], color='C0')
+
+line2 = ax7.get_lines()[1]  # Get the second line from ax3
+new_ax7.plot(line2.get_xdata(), line2.get_ydata(), label='Economic code', color='C1')
+offsets2 = ax7.collections[1].get_offsets()
+new_ax7.scatter(offsets2[:, 0], offsets2[:, 1], color='C1')
+
+new_ax7.set_title('Google')
+new_ax7.set_ylabel("Cosine Similarity (std)")
+new_ax7.set_xticks(range(1850, 2000, 20))
+
+line3 = ax8.get_lines()[0]  # Get the first line from ax4
+new_ax8.plot(line3.get_xdata(), line3.get_ydata(), color='C0')
+offsets3 = ax8.collections[0].get_offsets()
+new_ax8.scatter(offsets3[:, 0], offsets3[:, 1], color='C0')
+
+
+line4 = ax8.get_lines()[1]  # Get the second line from ax4
+new_ax8.plot(line4.get_xdata(), line4.get_ydata(), color='C1')
+offsets4 = ax8.collections[1].get_offsets()
+new_ax8.scatter(offsets4[:, 0], offsets4[:, 1], color='C1')
+
+new_ax8.set_title('COHA')
+new_ax8.set_xticks(range(1850, 2000, 20))
+new_ax8.yaxis.set_tick_params(labelleft=True)
+
+
+
+
+
+# create graph final
+
+handles, labels = new_ax1.get_legend_handles_labels()
+fig.legend(handles, labels, loc='outside center right', ncol=1)
+
+subfig1.suptitle('Political System',fontweight='bold')
+subfig2.suptitle('Educational System',fontweight='bold')
+subfig3.suptitle('Healthcare System',fontweight='bold')
+subfig4.suptitle('Scientific System',fontweight='bold')
+
+
+plt.show()
+
+
+
+
+
+
+
+
+
+#%% Protestant Ethic
+
+
+keywords['work'] = [
+    "work", "works", "worked", "working",
+    "job", "jobs",
+    "career", "careers",
+    "employment", "employed",
+    "labor", "labors", 'labour', 'labours'
+]
+
+# discarded:
+#"profession", "professions", "professional",
+#"occupation", "occupations",
+
+keywords['rich'] = [
+    "wealth", "wealthy",
+    "rich", "riches",
+    "affluence", "affluent",
+    "opulent", "opulence",
+    'luxury', 'luxurious',
+    'prosperity', 'prosperous'
+]
+
+keywords['poor'] = [
+    "poor", 'poorer', 'poorest',
+    "poverty", "impoverished",
+    'indigent', 'necessitous',
+    "destitute", "needy"
+]
+
+keywords['Affluence'] = keywords['rich'] + keywords['poor']
+
+
+keywords['Religion'] = [
+    "redemption", "salvation", "god", "religion", "holy", "calling", "faith", "pious",
+    "spiritual", "sacred", "divine", "belief", "worship"
+]
+
+
+
+
+keywords['Morality'] = [
+    'good', 'bad',
+    'moral', 'immoral', "morality",
+    'honest', 'dishonest', "honesty",
+    'virtuous', 'virtue', 'vice',
+    'sinful', "sin",
+    'evil',
+    "decent", "decency",
+    "noble",
+    "honour", "honourable"
+    "integrity",
+    "dignity"
+]
+
+# find related terms
+for year, model in google.items():
+    print(year, model.most_similar(positive=keywords['poor']))
+
+for year, model in coha.items():
+    print(year, model.most_similar(positive=['poor', 'poverty']))
+
+
+simdim.simdim(google, keywords, 'work', 'Morality', 'Affluence', 'Religion', rangelow=1850, stand=False)
+simdim.simdim(coha, keywords, 'work', 'Morality', 'Affluence', 'Religion', rangelow=1850, stand=False)
+
+simdim.simdim(google, keywords, 'work', 'Morality', 'Affluence', 'Religion', rangelow=1850, stand=True)
+simdim.simdim(coha, keywords, 'work', 'Morality', 'Affluence', 'Religion', rangelow=1850, stand=True)
+
+
+
+# tests:
+
+keywords['identity'] = [
+    "identity", "fulfilling", "expression", "express"
+]
+
+#simdim.simdim(models_all, keywords, 'work', 'rich', 'poor', ci=0)
+#simdim.simdim(models_all, keywords, 'work', 'moralpos', 'moralneg', ci=0)
+
+#simdim.simdim(models_all, keywords, 'work', 'identity', 'Religion', ci=0)
 
 
 
@@ -392,3 +806,9 @@ simdim.simdim(coha, keywords, 'econ', 'private', 'public', rangelow=1870)
 
 simdim.simdim(google, keywords, 'econ', 'private', 'public', rangelow=1850, stand = True)
 simdim.simdim(coha, keywords, 'econ', 'private', 'public', rangelow=1870, stand=True)
+
+
+
+
+
+

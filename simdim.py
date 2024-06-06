@@ -1,6 +1,4 @@
 
-# debug: title of graph should inlude key name
-
 # define similarity function for n dimensions
 # cosine similarity between centers of word clouds
 
@@ -27,13 +25,17 @@ def simdim(models, keywords, key, *dims, rangelow=1850, rangehigh=2000, rangeste
     for year, model in models.items():
         if year in range(rangelow, rangehigh, rangestep):
             for term in keywords[key]:
-                if model[term].all() == models[1810]['biology'].all():
+                if term not in model:
+                    print('Keyword ', term, ' not available for ', year)
+                elif model[term].all() == models[1810]['biology'].all():
                     print('Keyword ', term, ' not available for ', year)
                 else:
                     cleankeydict[key].append(term)
             for dim in dims:
                 for term in keywords[dim]:
-                    if model[term].all() == models[1810]['biology'].all():
+                    if term not in model:
+                        print('Keyword ', term, ' not available for ', year)
+                    elif model[term].all() == models[1810]['biology'].all():
                         print('Keyword ', term, ' not available for ', year)
                     else:
                         cleankeydict[dim].append(term)
@@ -103,36 +105,47 @@ def simdim(models, keywords, key, *dims, rangelow=1850, rangehigh=2000, rangeste
     markslist = ['o', 's', 'x']
     marks = iter(markslist)
 
+    fig, ax = plt.subplots()
+
     for dim in dims:
         y = similarities[dim].tolist()
         fun = interp1d(x, y, kind='cubic')
-        plt.plot(xnew, fun(xnew), "-", x, y, next(marks), color='black')
+        ax.plot(xnew, fun(xnew), "-", color='black')
+        ax.scatter(x, y, marker=next(marks), color='black')
 
     # add legend and labels
     if len(dims) == 1:
         legend1 = mlines.Line2D([], [], color='black', marker='o', label=dims[0])
-        plt.legend(handles=[legend1], loc='center left', bbox_to_anchor=(1, 0.5))
+        ax.legend(handles=[legend1], loc='center left', bbox_to_anchor=(1, 0.5))
 
     if len(dims) == 2:
         legend1 = mlines.Line2D([], [], color='black', marker='o', label=dims[0])
         legend2 = mlines.Line2D([], [], color='black', marker='s', label=dims[1])
-        plt.legend(handles=[legend1, legend2], loc='center left', bbox_to_anchor=(1, 0.5))
+        ax.legend(handles=[legend1, legend2], loc='center left', bbox_to_anchor=(1, 0.5))
 
     if len(dims) == 3:
         legend1 = mlines.Line2D([], [], color='black', marker='o', label=dims[0])
         legend2 = mlines.Line2D([], [], color='black', marker='s', label=dims[1])
         legend3 = mlines.Line2D([], [], color='black', marker='x', label=dims[2])
 
-        plt.legend(handles=[legend1, legend2, legend3], loc='center left', bbox_to_anchor=(1, 0.5))
+        ax.legend(handles=[legend1, legend2, legend3], loc='center left', bbox_to_anchor=(1, 0.5))
 
-    plt.xlabel("Year")
-    plt.ylabel("Cosine Similarity")
-    plt.xticks(range(rangelow, rangehigh, 20))
-    plt.tight_layout()
+    if 1800 in models:
+        plt.suptitle('Google')
+    if 2000 in models:
+        plt.suptitle('COHA')
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Cosine Similarity (std)")
+    ax.set_xticks(range(rangelow, rangehigh, 20))
+    #plt.tight_layout()
 
     # show plot
-    plt.show()
-    plt.close()
+    #plt.show()
+    #plt.close()
+
+    return ax
+
+
 
 
 
