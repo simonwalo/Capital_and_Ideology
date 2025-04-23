@@ -98,17 +98,6 @@ semchange(googlefiction, "gay", rangelow=1870, rangehigh=2000, rangestep=60, exp
 
 
 keywords['econ'] = [
-    "profit", "profitable", "cost", "benefit", "sell", "revenue", "gain",
-    "loss", "capital", "invest", "economic", "price", "business", "money", "trade",
-    "pay", "paid"
-]
-
-keywords['econ'] = [
-    "economy", "invest", "economic", "business", "money", "trade"
-]
-
-
-keywords['econ'] = [
     "economy", "economic",
     "invest", "investment",
     "business", "businesses",
@@ -123,15 +112,6 @@ keywords['econ'] = [
 ]
 
 
-
-keywords['Regulation'] = [
-    "regulate", "regulated", "regulation", "regulations", #sinkt
-    "intervene", "intervention", "interventions", #steigt
-    "govern", "government", "governments", #steigt
-    "restrict", "restriction", "restrictions", #sinkt
-    "prohibit", "prohibition", #sinkt
-    "control", "controlled" #sinkt
-]
 
 keywords['Regulation'] = [
     "regulate", "regulated", "regulation", "regulations", "regulating",
@@ -186,46 +166,6 @@ keywords['Work'] = [
 #"profession", "professions", "professional",
 #"occupation", "occupations",
 
-keywords['merit'] = [
-    'merit', 'merits', 'merited', # nimmt ab, coha zu
-    'deserve', 'deserved', 'deserves', 'deserving', # nimmt zu
-    'just', 'justice', 'justly', #nimmt zu
-    "effort", "efforts", # nimmt leicht zu
-    'perform', 'performance', # leichte zunahme, coha abnahme
-    'reward', 'rewards', 'rewarded', #google abnahme, coha zunahme
-    'accomplish', 'accomplishment',  # leichte zunahme, coha zunahme
-    'achieve', 'achievement' # konstant, coha abnahme
-]
-
-'''
-#discarded:
-# 'fair', 'fairness' (polysemy)
-# 'just', 'justice', 'justly',  #nimmt zu
-
-#    'merit', 'merits', 'merited',  # nimmt ab, coha zu
-    'deserve', 'deserved', 'deserves', 'deserving',  # nimmt zu
-
-    'perform', 'performance',  # leichte zunahme, coha abnahme
-    'reward', 'rewards', 'rewarded',  #google abnahme, coha zunahme
-    'accomplish', 'accomplishment',  # leichte zunahme, coha zunahme
-    'achieve', 'achievement',  # konstant, coha abnahme
-'''
-
-#test
-keywords['merit'] = [
-    'talent', 'talents', "talented",  # zunahme, coha abnahme
-    'skill', 'skills', "skilled",  # konstant, coha abnahme
-    'able', 'ability', 'abilities',  # konstant, coha abnahme
-    "effort", "efforts",  # nimmt leicht zu
-    "commitment", "commit", "commited",
-    "dedication", "dedicate", "dedicated"
-]
-
-simdim(google, "Google", keywords, 'Affluence', 'Work', 'Inheritance', 'merit', rangelow=1850, stand=False)
-simdim(coha, 'COHA', keywords, 'Affluence', 'Work', 'merit', 'Inheritance', rangelow=1850, stand=False)
-
-simdim(google, "Google", keywords, 'Affluence', 'Work', 'Inheritance', 'merit', rangelow=1850, stand=True)
-simdim(coha, 'COHA', keywords, 'Affluence', 'Work', 'merit', 'Inheritance', rangelow=1850, stand=True)
 
 keywords['rich'] = [
     "wealth", "wealthy",
@@ -247,13 +187,6 @@ keywords['Affluence'] = keywords['rich'] + keywords['poor']
 
 
 
-
-keywords['luck'] = [
-    'luck', 'lucky', 'unlucky'
-    'chance', 'chances',
-    'fortunate', 'unfortunate'
-]
-
 keywords['Inheritance'] = [
     'inherit', 'inherited', 'inheritance', 'heir', 'heirs',
     'inheritor', 'inheritors', 'hereditary', 'heritage',
@@ -267,7 +200,7 @@ keywords['Inheritance'] = [
 
 
 
-keywords['luckinherit'] = keywords['luck'] + keywords['Inheritance']
+
 
 # find related terms
 for year, model in google.items():
@@ -303,76 +236,6 @@ keywords['work'] = [
 #     "occupation", "occupations",
 
 
-keywords['alienation'] = [
-    # Core concepts
-    "exploitation", "exploit", "exploited", "exploiting", "exploits",
-    "alienation", "alienated", "alienating", "alienates",
-    "oppression", "oppress", "oppressed", "oppressing", "oppressive",
-    "commodification", "commodify", "commodified", "commodifies",
-    "coercion", "coerce", "coerced", "coercing", "coercive",
-    "force", "forced", "forcing",
-    "disempowerment", "disempowered", "disempower", "disempowering",
-    "extraction", "extract", "extracted", "extracting"]
-
-'''
-    # Descriptive/emotional
-    "exhaustion", "exhaust", "exhausted", "exhausting",
-    "burnout", "burned", "burnt", "burning",
-    "monotony", "monotonous",
-    "drudgery", "drudge", "drudging",
-    "dehumanization", "dehumanize", "dehumanized", "dehumanizing",
-    "subjugation", "subjugate", "subjugated", "subjugating",
-    "dispossession", "dispossess", "dispossessed", "dispossessing",
-    "misery", "miserable",
-    "inequality", "unequal",
-    "dependency", "dependent", "dependence", "depending",
-
-    # Class/systemic critique
-    "proletariat",
-    "accumulation",
-    "discipline",
-    "powerlessness", "powerless",
-    "unfreedom",
-    "violence",
-    "overwork", "overworked", "overworking",
-    "precarity", "precarious",
-    "gigification", "gigified"
-]
-
-'''
-
-keywords['alienation'] = [
-    "exploitation", "exploit", "exploited", "exploiting", "exploits",
-    "alienation", "alienated", "alienating", "alienates",
-    "oppression", "oppress", "oppressed", "oppressing", "oppressive",
-    "commodification", "commodify", "commodified", "commodifies",
-    "coercion", "coerce", "coerced", "coercing", "coercive",
-
-    "tired", "tiring",
-    "exhausted", "exhausting",
-    "stress", "stressed", "stressful",
-    "miserable", "suffering",
-    "struggle", "struggling"
-    "depressed",
-    "bored", "boring",
-    "meaningless", "worthless",
-    "dangerous", "unsafe", "monotonous",
-
-
-    'toil', 'toils',
-    'trouble', 'troubles',
-    'struggle', 'struggles', 'drudgery',
-    'pain', 'pains',
-    'fatigue', 'arduous', 'strenuous'
-]
-
-''' discarded
-"resentment", "frustration",
-"abused", "used", "trapped", "controlled", "manipulated",
-    "dependent", "submissive", "obedient", "rigid", "thankless",
-    "force", "forced", "forcing",
-    "extraction", "extract", "extracted", "extracting",
-'''
 
 
 keywords['Extrinsic'] = [
@@ -396,7 +259,7 @@ keywords['Intrinsic'] = [
     'meaning', 'meaningful'
 ]
 
-# temp discard:
+#  discarded:
 #"meaningless"
  #   "useful", "useless",
 #    "boring", "bore", "bored"
@@ -416,81 +279,6 @@ simdim(coha, "COHA", keywords, 'work', 'alienation', 'Intrinsic', rangelow=1850,
 
 #extra: google books fiction
 simdim(googlefiction, keywords, 'work', 'Extrinsic', 'Intrinsic', rangelow=1850, stand=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-##### NOT INCLUDED IN PAPER #####
-
-
-
-
-#%% Economy: privat profits vs. social benefits
-
-
-keywords['econ'] = [
-    "economy", "invest", "economic", "business", "money", "trade"
-]
-
-keywords['private'] = [
-    "private", "profit", "profits", "gain", "money", "revenue", "earn", "income"
-]
-
-keywords['public'] = [
-    "social", "benefit", "benefits", "welfare", "society",
-    "community", "public", "wellbeing"
-]
-
-simdim(google, "Google", keywords, 'econ', 'private', 'public', rangelow=1850)
-simdim(coha, "COHA", keywords, 'econ', 'private', 'public', rangelow=1870)
-
-simdim(google, keywords, 'econ', 'private', 'public', rangelow=1850, stand = True)
-simdim(coha, keywords, 'econ', 'private', 'public', rangelow=1870, stand=True)
-
-
-
-
-
-
-
-#%% moralische Bewertung von Ungleichheit & Steuern
-
-
-keywords['just'] = [
-    "good", "just", "justice", "fair"
-]
-
-keywords['unjust'] = [
-    "evil", "immoral", "bad", "unjust", "injustice", "unfair"
-]
-
-
-keywords['inequality'] = [
-    "inequality", "unequal", "inequalities", "disparity"
-]
-
-keywords['taxes'] = [
-    "taxes", "taxation", "tax"
-]
-
-keywords['unemployment'] = [
-    "unemployed", "unemployment"
-]
 
 
 
